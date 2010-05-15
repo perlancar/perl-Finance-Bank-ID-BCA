@@ -1,0 +1,26 @@
+Revision history for Finance-Bank-ID-BCA
+
+0.07    2010-02-17
+        - switch from Moose to Any::Moose (+Mouse as dependency)
+        
+0.06    2010-01-13
+        - remove "use Log::Log4perl" in test script
+        
+0.05    2010-01-07
+        - switch from Log::Log4perl to Log::Any
+        - switch from MakeMaker to Module::Builder
+
+0.04    2009-11-26
+        - handle float round-off error on matching total credit vs debit
+        
+0.03    2009-11-11
+        - Now also parses copy-pasted text from Chrome (4.0 Linux) for KlikBCA
+          Personal.
+        - BIAYA ADM is also possible outside Mon-Fri for Personal accounts.
+
+0.02    2009-10-20
+        - Now also parses the English version of KlikBCA Personal.
+        - A few minor fixes.
+
+0.01    2009-10-14
+        First release.

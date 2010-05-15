@@ -1,0 +1,116 @@
+#!/usr/bin/perl -w
+
+# this is a command-line script which you can run from cron or
+# whatever to conveniently download statements. customize as needed.
+# using App::Options, you can put username and password in
+# ~/.app/download-bca.conf, e.g.:
+#
+# [ALL]
+# username = ABCDEF0123
+# password = 123456
+#
+# see App::Options for more details.
+
+use strict;
+use Cwd;
+use File::HomeDir;
+use File::Path;
+use File::Slurp;
+use Finance::Bank::ID::BCA;
+use Log::Log4perl;
+use Log::Dispatch::Dir;
+use Log::Any;
+use Log::Any::Adapter;
+use YAML;
+
+use App::Options (
+    option => {
+        profile   => { type => 'string', required => 0, default => 'default' },
+        account   => { type => 'string', required => 0, default => "" },
+        username  => { type => 'string', required => 1 },
+        password  => { type => 'string', required => 1 },
+        data_dir  => { type => 'string', required => 1, default => File::HomeDir->my_home . "/bca" },
+        log_dir   => { type => 'string', required => 1, default => File::HomeDir->my_home . "/bca/logs" },
+        log_level => { type => 'string', required => 0, default => "DEBUG" },
+        days      => { type => 'string', required => 0, default => 31 },
+    },
+);
+
+my $level = $App::options{log_level};
+my $levels = "FATAL|ERROR|WARN|INFO|DEBUG";
+die "Invalid log level `$level', please use one of $levels" if ($level !~ /^($levels)$/);
+
+mkpath($App::options{data_dir})                       unless (-d $App::options{data_dir});
+die "Can't create data_dir `$App::options{data_dir}'" unless (-d $App::options{data_dir});    
+
+mkpath($App::options{log_dir})                        unless (-d $App::options{log_dir});
+die "Can't create log_dir `$App::options{log_dir}'"   unless (-d $App::options{log_dir});    
+
+mkpath("$App::options{log_dir}/dumps")                unless (-d "$App::options{log_dir}/dumps");
+die "Can't create `$App::options{log_dir}'/dumps"     unless (-d "$App::options{log_dir}/dumps");    
+
+
+my $log_config = <<_;
+log4perl.logger.Messages=$level, SCREEN, LOGFILE
+log4perl.logger.Dumps=$level, LOGDIR
+
+log4perl.appender.SCREEN=Log::Log4perl::Appender::ScreenColoredLevels
+log4perl.appender.SCREEN.layout=PatternLayout
+log4perl.appender.SCREEN.layout.ConversionPattern=[\%r] %m%n
+
+log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
+log4perl.appender.LOGFILE.filename=$App::options{log_dir}/main.log
+log4perl.appender.LOGFILE.layout=PatternLayout
+log4perl.appender.LOGFILE.layout.ConversionPattern=[\%d] %m%n
+
+log4perl.appender.LOGDIR=Log::Dispatch::Dir
+log4perl.appender.LOGDIR.dirname=$App::options{log_dir}/dumps
+log4perl.appender.LOGDIR.layout=PatternLayout
+log4perl.appender.LOGDIR.layout.ConversionPattern=%m
+_
+Log::Log4perl::init(\$log_config);
+Log::Any::Adapter->set('Log4perl');
+
+my $log = Log::Any->get_logger(category => "Messages");
+$log->info("Start session");
+
+my $ibank = Finance::Bank::ID::BCA->new(
+    username    => $App::options{username},
+    password    => $App::options{password},
+    logger      => $log,
+    logger_dump => Log::Any->get_logger(category => "Dumps"),
+);
+
+eval {
+    my @bal = $ibank->_check_balances;
+    $log->debug("Balances: ".$ibank->_dmp(\@bal));
+
+    my $stmt = $ibank->get_statement(
+        account => $App::options{account},
+        days => $App::options{days},
+    );
+    my $filename = sprintf "%s/bca.statement.%s.%s.to.%s.yaml",
+        $App::options{data_dir},
+        $stmt->{account},
+        $stmt->{start_date}->ymd,
+        $stmt->{end_date}->ymd;
+    $log->info("Writing statements to YAML file `$filename' ...");
+
+    # stringify DateTime objects so dump becomes simpler and shorter
+    $stmt->{start_date} = $stmt->{start_date}->ymd;
+    $stmt->{end_date} = $stmt->{end_date}->ymd;
+    for (@{ $stmt->{transactions} }) {
+        $_->{date} = $_->{date}->ymd;
+    }
+
+    write_file($filename, Dump($stmt));
+};
+
+if ($@) {
+    $log->error("die: $@");
+}
+
+# no matter what, try to logout so we're not locked out for 10 minutes, annoying
+eval { $ibank->logout; };
+
+$log->info("End session");
