@@ -16,8 +16,9 @@ for my $f (
     ["stmt1.ff35linux.txt", "personal, txt, ff35linux"],
     ["stmt1-en.opera10linux.txt", "personal (en), txt, opera10linux"],
 ) {
-    my ($status, $error, $stmt) = $ibank->parse_statement(scalar read_file("$Bin/data/$f->[0]"));
-    die "status=$status, error=$error\n" if $status != 200;
+    my $resp = $ibank->parse_statement(scalar read_file("$Bin/data/$f->[0]"));
+    die "status=$resp->[0], error=$resp->[1]\n" if $resp->[0] != 200;
+    my $stmt = $resp->[2];
 
     # metadata
     is($stmt->{account}, "1234567890", "$f->[1] (account)");
@@ -50,8 +51,9 @@ for my $f (
 for my $f (
     ["stmt1b.chrome4linux.txt", "personal, txt, chrome4linux"],
 ) {
-    my ($status, $error, $stmt) = $ibank->parse_statement(scalar read_file("$Bin/data/$f->[0]"));
-    die "status=$status, error=$error\n" if $status != 200;
+    my $resp = $ibank->parse_statement(scalar read_file("$Bin/data/$f->[0]"));
+    die "status=$resp->[0], error=$resp->[1]\n" if $resp->[0] != 200;
+    my $stmt = $resp->[2];
 
     # metadata
     is($stmt->{account}, "1234567890", "$f->[1] (account)");
@@ -83,8 +85,9 @@ for my $f (
 
 for my $f (
     ["stmt2.txt", "bisnis, txt"],) {
-    my ($status, $error, $stmt) = $ibank->parse_statement(scalar read_file("$Bin/data/$f->[0]"));
-    die "status=$status, error=$error\n" if $status != 200;
+    my $resp = $ibank->parse_statement(scalar read_file("$Bin/data/$f->[0]"));
+    die "status=$resp->[0], error=$resp->[1]\n" if $resp->[0] != 200;
+    my $stmt = $resp->[2];
 
     # metadata
     is($stmt->{account}, "1234567890", "$f->[1] (account)");
