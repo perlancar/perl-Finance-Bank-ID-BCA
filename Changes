@@ -1,5 +1,8 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.09    2010-06-17
+        - build fixes
+
 0.08    2010-06-11
         - INCOMPATIBLE CHANGE: parse_statement now always returns
           3-element arrayref instead of depending on list/scalar
