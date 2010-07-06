@@ -13,6 +13,7 @@
 
 use strict;
 use Cwd;
+use Data::Rmap qw(:all);
 use File::HomeDir;
 use File::Path;
 use File::Slurp;
@@ -41,13 +42,13 @@ my $levels = "FATAL|ERROR|WARN|INFO|DEBUG";
 die "Invalid log level `$level', please use one of $levels" if ($level !~ /^($levels)$/);
 
 mkpath($App::options{data_dir})                       unless (-d $App::options{data_dir});
-die "Can't create data_dir `$App::options{data_dir}'" unless (-d $App::options{data_dir});    
+die "Can't create data_dir `$App::options{data_dir}'" unless (-d $App::options{data_dir});
 
 mkpath($App::options{log_dir})                        unless (-d $App::options{log_dir});
-die "Can't create log_dir `$App::options{log_dir}'"   unless (-d $App::options{log_dir});    
+die "Can't create log_dir `$App::options{log_dir}'"   unless (-d $App::options{log_dir});
 
 mkpath("$App::options{log_dir}/dumps")                unless (-d "$App::options{log_dir}/dumps");
-die "Can't create `$App::options{log_dir}'/dumps"     unless (-d "$App::options{log_dir}/dumps");    
+die "Can't create `$App::options{log_dir}'/dumps"     unless (-d "$App::options{log_dir}/dumps");
 
 
 my $log_config = <<_;
@@ -97,11 +98,7 @@ eval {
     $log->info("Writing statements to YAML file `$filename' ...");
 
     # stringify DateTime objects so dump becomes simpler and shorter
-    $stmt->{start_date} = $stmt->{start_date}->ymd;
-    $stmt->{end_date} = $stmt->{end_date}->ymd;
-    for (@{ $stmt->{transactions} }) {
-        $_->{date} = $_->{date}->ymd;
-    }
+    rmap_all { $_ = $_->ymd if UNIVERSAL::isa($_, "DateTime") } $stmt;
 
     write_file($filename, Dump($stmt));
 };
