@@ -12,11 +12,12 @@ L<Finance::Bank::ID::Mandiri>.
 
 =cut
 
+use 5.010;
 use Any::Moose;
 use Data::Dumper;
 use DateTime;
 use Log::Any;
-use WWW::Mechanize;
+use Finance::BankUtils::ID::Mechanize;
 
 =head1 ATTRIBUTES
 
@@ -35,6 +36,10 @@ has logger_dump => (is => 'rw',
 has site => (is => 'rw');
 
 has _req_counter => (is => 'rw', default => 0);
+
+has verify_https => (is => 'rw', default => 0);
+has https_ca_dir => (is => 'rw', default => '/etc/ssl/certs');
+has https_host   => (is => 'rw');
 
 =head1 METHODS
 
@@ -72,13 +77,24 @@ sub BUILD {
     $self->password($args->{pin})   if $args->{pin}   && !$self->password;
 }
 
+sub _set_default_mech {
+    my ($self) = @_;
+    $self->mech(
+        Finance::BankUtils::ID::Mechanize->new(
+            verify_https => $self->verify_https,
+            https_ca_dir => $self->https_ca_dir,
+            https_host   => $self->https_host,
+        )
+    );
+}
+
 # if check_sub is supplied, then after the request it will be passed the mech
 # object and should return an error string. request is assumed to be failed if
 # error string is not empty.
 
 sub _req {
     my ($self, $meth, $args, $check_sub) = @_;
-    $self->mech(new WWW::Mechanize) unless $self->mech;
+    $self->_set_default_mech unless $self->mech;
     my $mech = $self->mech;
     my $c = $self->_req_counter + 1;
     $self->_req_counter($c);
