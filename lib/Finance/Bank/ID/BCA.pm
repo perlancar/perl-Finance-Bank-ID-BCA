@@ -54,8 +54,9 @@ this module.
 This module provide a rudimentary interface to the web-based online banking
 interface of the Indonesian B<Bank Central Asia> (BCA) at
 https://ibank.klikbca.com. You will need either L<Crypt::SSLeay> or
-L<IO::Socket::SSL> installed for HTTPS support to work. L<WWW::Mechanize> is
-required but you can supply your own mech-like object.
+L<IO::Socket::SSL> installed for HTTPS support to work (and strictly
+Crypt::SSLeay to enable certificate verification). L<WWW::Mechanize> is required
+but you can supply your own mech-like object.
 
 This module can only login to the retail/personal version of the site (KlikBCA
 perorangan) and not the corporate/business version (KlikBCA bisnis) as the later

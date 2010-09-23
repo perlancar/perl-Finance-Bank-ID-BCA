@@ -80,6 +80,7 @@ my $ibank = Finance::Bank::ID::BCA->new(
     password    => $App::options{password},
     logger      => $log,
     logger_dump => Log::Any->get_logger(category => "Dumps"),
+    verify_https => 1,
 );
 
 eval {
