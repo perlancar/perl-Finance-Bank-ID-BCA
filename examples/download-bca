@@ -98,8 +98,10 @@ eval {
         $stmt->{end_date}->ymd;
     $log->info("Writing statements to YAML file `$filename' ...");
 
-    # stringify DateTime objects so dump becomes simpler and shorter
-    rmap_all { $_ = $_->ymd if UNIVERSAL::isa($_, "DateTime") } $stmt;
+    # stringify DateTime objects so dump becomes simpler and shorter, the
+    # $_[0]{seen} = {} is a trick to allow multiple places which mention the same
+    # object to be converted (defeat circular checking)
+    rmap_ref { $_[0]{seen} = {}; $_ = $_->ymd if UNIVERSAL::isa($_, "DateTime") } $stmt;
 
     write_file($filename, Dump($stmt));
 };
