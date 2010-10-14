@@ -1,5 +1,8 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.13    2010-10-14
+        - also count skipped transactions when totalling debit/credit
+
 0.12    2010-09-23
         - enable verify_https in example script
         - minor doc update

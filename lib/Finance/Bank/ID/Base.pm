@@ -230,7 +230,8 @@ sub parse_statement {
         if (defined($stmt->{_total_debit_in_stmt})) {
             my $na = $stmt->{_total_debit_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) {
+            for (@{ $stmt->{transactions} },
+                 @{ $stmt->{skipped_transactions} }) {
                 $nb += $_->{amount} < 0 ? -$_->{amount} : 0;
             }
             if (abs($na-$nb) >= 0.01) {
@@ -242,7 +243,8 @@ sub parse_statement {
         if (defined($stmt->{_total_credit_in_stmt})) {
             my $na = $stmt->{_total_credit_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) {
+            for (@{ $stmt->{transactions} },
+                 @{ $stmt->{skipped_transactions} }) {
                 $nb += $_->{amount} > 0 ? $_->{amount} : 0;
             }
             if (abs($na-$nb) >= 0.01) {
