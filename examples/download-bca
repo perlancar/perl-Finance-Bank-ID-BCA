@@ -18,10 +18,6 @@ use File::HomeDir;
 use File::Path;
 use File::Slurp;
 use Finance::Bank::ID::BCA;
-use Log::Log4perl;
-use Log::Dispatch::Dir;
-use Log::Any;
-use Log::Any::Adapter;
 use YAML;
 
 use App::Options (
@@ -32,47 +28,29 @@ use App::Options (
         password  => { type => 'string', required => 1 },
         data_dir  => { type => 'string', required => 1, default => File::HomeDir->my_home . "/bca" },
         log_dir   => { type => 'string', required => 1, default => File::HomeDir->my_home . "/bca/logs" },
-        log_level => { type => 'string', required => 0, default => "DEBUG" },
         days      => { type => 'string', required => 0, default => 31 },
     },
 );
 
-my $level = $App::options{log_level};
-my $levels = "FATAL|ERROR|WARN|INFO|DEBUG";
-die "Invalid log level `$level', please use one of $levels" if ($level !~ /^($levels)$/);
+use vars qw($Log_Level);
+BEGIN { $Log_Level = "debug" }
+
+use Log::Any::App '$log',
+    -category_level => {Dumps=>'off'},
+    -file           => {
+        path           => "$App::options{log_dir}/main.log",
+    },
+    -dir            => {
+        path           => "$App::options{log_dir}/dumps",
+        level          => 'off',
+        # currently we always dump, Log::Any::App > 0.23 will support specifying
+        # sub { ... } to refer to general level
+        category_level => {Dumps => 'trace'},
+    };
 
 mkpath($App::options{data_dir})                       unless (-d $App::options{data_dir});
 die "Can't create data_dir `$App::options{data_dir}'" unless (-d $App::options{data_dir});
 
-mkpath($App::options{log_dir})                        unless (-d $App::options{log_dir});
-die "Can't create log_dir `$App::options{log_dir}'"   unless (-d $App::options{log_dir});
-
-mkpath("$App::options{log_dir}/dumps")                unless (-d "$App::options{log_dir}/dumps");
-die "Can't create `$App::options{log_dir}'/dumps"     unless (-d "$App::options{log_dir}/dumps");
-
-
-my $log_config = <<_;
-log4perl.logger.Messages=$level, SCREEN, LOGFILE
-log4perl.logger.Dumps=$level, LOGDIR
-
-log4perl.appender.SCREEN=Log::Log4perl::Appender::ScreenColoredLevels
-log4perl.appender.SCREEN.layout=PatternLayout
-log4perl.appender.SCREEN.layout.ConversionPattern=[\%r] %m%n
-
-log4perl.appender.LOGFILE=Log::Log4perl::Appender::File
-log4perl.appender.LOGFILE.filename=$App::options{log_dir}/main.log
-log4perl.appender.LOGFILE.layout=PatternLayout
-log4perl.appender.LOGFILE.layout.ConversionPattern=[\%d] %m%n
-
-log4perl.appender.LOGDIR=Log::Dispatch::Dir
-log4perl.appender.LOGDIR.dirname=$App::options{log_dir}/dumps
-log4perl.appender.LOGDIR.layout=PatternLayout
-log4perl.appender.LOGDIR.layout.ConversionPattern=%m
-_
-Log::Log4perl::init(\$log_config);
-Log::Any::Adapter->set('Log4perl');
-
-my $log = Log::Any->get_logger(category => "Messages");
 $log->info("Start session");
 
 my $ibank = Finance::Bank::ID::BCA->new(
