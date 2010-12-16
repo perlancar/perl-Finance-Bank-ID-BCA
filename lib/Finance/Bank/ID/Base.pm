@@ -256,7 +256,8 @@ sub parse_statement {
         if (defined($stmt->{_num_debit_tx_in_stmt})) {
             my $na = $stmt->{_num_debit_tx_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) {
+            for (@{ $stmt->{transactions} },
+                 @{ $stmt->{skipped_transactions} }) {
                 $nb += $_->{amount} < 0 ? 1 : 0;
             }
             if ($na != $nb) {
@@ -269,7 +270,8 @@ sub parse_statement {
         if (defined($stmt->{_num_credit_tx_in_stmt})) {
             my $na = $stmt->{_num_credit_tx_in_stmt};
             my $nb = 0;
-            for (@{ $stmt->{transactions} }) {
+            for (@{ $stmt->{transactions} },
+                 @{ $stmt->{skipped_transactions} }) {
                 $nb += $_->{amount} > 0 ? 1 : 0;
             }
             if ($na != $nb) {

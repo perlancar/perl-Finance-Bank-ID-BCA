@@ -1,7 +1,7 @@
 #!perl -Tw
 
 use strict;
-use Test::More tests => (4*15 + 1*15 + 1*15);
+use Test::More tests => (4*15 + 1*15 + 1*15 + 1*2);
 use DateTime;
 use File::Slurp;
 use FindBin '$Bin';
@@ -115,4 +115,18 @@ for my $f (
 
     is($stmt->{transactions}[1]{seq}, 2, "$f->[1] (seq 1)");
     is($stmt->{transactions}[2]{seq}, 3, "$f->[1] (seq 2)");
+}
+
+# check skip_NEXT
+for my $f (
+    ["stmt2-NEXT.txt", "bisnis, txt"],) {
+    local $ibank->{skip_NEXT} = 1;
+    my $resp = $ibank->parse_statement(scalar read_file("$Bin/data/$f->[0]"));
+    die "status=$resp->[0], error=$resp->[1]\n" if $resp->[0] != 200;
+    my $stmt = $resp->[2];
+
+    # transactions
+    is(scalar(@{ $stmt->{transactions} }), 2, "$f->[1] (num tx)");
+    is(scalar(@{ $stmt->{skipped_transactions} }), 1,
+       "$f->[1] (num skipped tx)");
 }

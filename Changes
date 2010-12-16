@@ -1,5 +1,8 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.15    2010-12-16
+        - add skip_NEXT
+
 0.14    2010-12-03
         - change example script to use Log::Any::App
 
