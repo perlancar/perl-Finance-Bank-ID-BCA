@@ -44,7 +44,7 @@ package Finance::Bank::ID::BCA;
     if ($ibank->logged_in) { $ibank->logout() }
 
     # utility routines
-    my $stmt = $ibank->parse_statement($html_or_copy_pasted_text);
+    my $res = $ibank->parse_statement($html_or_copy_pasted_text);
 
 Also see the examples/ subdirectory in the distribution for a sample script using
 this module.
@@ -320,7 +320,7 @@ sub check_balance {
     return;
 }
 
-=head2 get_statement(%args)
+=head2 get_statement(%args) => $stmt
 
 Get account statement. %args keys:
 
@@ -346,6 +346,8 @@ Optional. Default is today (or some 1+ days from today if today is a
 Saturday/Sunday/holiday, depending on the default value set by the site's form).
 
 =back
+
+See parse_statement() on structure of $stmt.
 
 =cut
 
@@ -459,7 +461,7 @@ sub get_statement {
     $resp->[2];
 }
 
-=head2 parse_statement($html_or_text, %opts)
+=head2 parse_statement($html_or_text, %opts) => $res
 
 Given the HTML/copy-pasted text of the account statement results page, parse it
 into structured data:
