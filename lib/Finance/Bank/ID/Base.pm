@@ -35,10 +35,10 @@ has logger_dump => (is => 'rw',
 
 has site => (is => 'rw');
 
-has _req_counter => (is => 'rw', default => 0);
+has _req_counter => (is => 'rw', default => sub{0});
 
-has verify_https => (is => 'rw', default => 0);
-has https_ca_dir => (is => 'rw', default => '/etc/ssl/certs');
+has verify_https => (is => 'rw', default => sub{0});
+has https_ca_dir => (is => 'rw', default => sub{'/etc/ssl/certs'});
 has https_host   => (is => 'rw');
 
 =head1 METHODS
