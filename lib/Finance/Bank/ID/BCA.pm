@@ -93,7 +93,7 @@ in the distribution.
 =cut
 
 use 5.010;
-use Any::Moose;
+use Moo;
 use DateTime;
 
 extends 'Finance::Bank::ID::Base';
@@ -661,6 +661,4 @@ sub _ps_get_transactions {
     "";
 }
 
-__PACKAGE__->meta->make_immutable;
-no Any::Moose;
 1;

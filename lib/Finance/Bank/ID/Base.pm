@@ -13,7 +13,7 @@ L<Finance::Bank::ID::Mandiri>.
 =cut
 
 use 5.010;
-use Any::Moose;
+use Moo;
 use Data::Dumper;
 use DateTime;
 use Log::Any;
@@ -305,6 +305,4 @@ sub parse_statement {
     [$status, $error, $stmt];
 }
 
-__PACKAGE__->meta->make_immutable;
-no Any::Moose;
 1;
