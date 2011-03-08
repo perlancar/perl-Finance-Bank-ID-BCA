@@ -1,5 +1,8 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.17    2011-03-08
+        - switch from Moose to Moo
+
 0.16    2010-12-21
         - more helpful error messages when checking total debit/credit
 

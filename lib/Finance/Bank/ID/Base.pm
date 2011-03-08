@@ -43,6 +43,8 @@ has https_host   => (is => 'rw');
 
 =head1 METHODS
 
+=for Pod::Coverage BUILD
+
 =cut
 
 sub _fmtdate {

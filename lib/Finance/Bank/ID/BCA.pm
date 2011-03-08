@@ -114,6 +114,8 @@ has skip_NEXT => (is => 'rw'); # bisnis or perorangan
 
 =head1 METHODS
 
+=for Pod::Coverage BUILD
+
 =cut
 
 =head2 new(%args)
