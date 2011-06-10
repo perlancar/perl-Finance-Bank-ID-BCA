@@ -102,12 +102,16 @@ Then:
 
  $ download-bca
 
+For quieter output:
+
+ $ QUIET=1 download-bca
+
 
 =head1 DESCRIPTION
 
 This is a command-line script which you can run from cron or whatever to
 conveniently download BCA statements. By default, it downloads a month's worth
-of statements. Future version will allow options.
+of statements to ~/bca/. Future version will allow options.
 
 
 =head1 SEE ALSO
