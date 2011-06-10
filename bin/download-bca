@@ -119,8 +119,8 @@ For quieter output:
 =head1 DESCRIPTION
 
 This is a command-line script which you can run from cron or whatever to
-conveniently download BCA statements. By default, it downloads a month's worth
-of statements to ~/bca/. Future version will allow options.
+conveniently download BCA statements. By default, it downloads 31 day's worth of
+statements to ~/bca/. To change this, use --days and --data_dir options.
 
 
 =head1 SEE ALSO
