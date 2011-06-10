@@ -1,5 +1,10 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.18    2011-06-10
+
+        No functional changes. Moved script from examples/ to bin/.
+
+
 0.17    2011-03-08
         - switch from Moose to Moo
 

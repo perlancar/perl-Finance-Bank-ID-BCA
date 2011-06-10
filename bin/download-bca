@@ -15,15 +15,20 @@ use File::Slurp;
 use Finance::Bank::ID::BCA;
 use YAML;
 
+# we don't use required=>1 because App::Options still works in BEGIN phase and
+# thus breaks perl -c.
+
 use App::Options (
     option => {
-        profile   => { type => 'string', required => 0, default => 'default' },
-        account   => { type => 'string', required => 0, default => "" },
-        username  => { type => 'string', required => 1 },
-        password  => { type => 'string', required => 1 },
-        data_dir  => { type => 'string', required => 1, default => File::HomeDir->my_home . "/bca" },
-        log_dir   => { type => 'string', required => 1, default => File::HomeDir->my_home . "/bca/logs" },
-        days      => { type => 'string', required => 0, default => 31 },
+        profile   => { type => 'string', default => 'default' },
+        account   => { type => 'string', default => "" },
+        username  => { type => 'string' }, # req
+        password  => { type => 'string' }, # req
+        data_dir  => { type => 'string',   # req
+                       default => File::HomeDir->my_home . "/bca" },
+        log_dir   => { type => 'string',   # req
+                       default => File::HomeDir->my_home . "/bca/logs" },
+        days      => { type => 'string', default => 31 },
     },
 );
 
@@ -42,6 +47,10 @@ use Log::Any::App '$log',
         # sub { ... } to refer to general level
         category_level => {Dumps => 'trace'},
     };
+
+for (qw/username password data_dir log_dir/) {
+    defined($App::options{$_}) or die "Missing required argument: $_\n";
+}
 
 mkpath($App::options{data_dir})                       unless (-d $App::options{data_dir});
 die "Can't create data_dir `$App::options{data_dir}'" unless (-d $App::options{data_dir});
