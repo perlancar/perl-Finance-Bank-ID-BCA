@@ -111,9 +111,8 @@ Then:
 
  $ download-bca
 
-For quieter output:
-
- $ QUIET=1 download-bca
+Get your statements in data dir (defaults to ~/bca). See logs in your log dir
+(defaults to ~/bca/logs).
 
 
 =head1 DESCRIPTION
