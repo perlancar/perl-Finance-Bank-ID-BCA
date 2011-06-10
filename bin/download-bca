@@ -1,17 +1,12 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
-# this is a command-line script which you can run from cron or
-# whatever to conveniently download statements. customize as needed.
-# using App::Options, you can put username and password in
-# ~/.app/download-bca.conf, e.g.:
-#
-# [ALL]
-# username = ABCDEF0123
-# password = 123456
-#
-# see App::Options for more details.
+# workaround for dzil
+package download_bca;
 
+use 5.010;
 use strict;
+use warnings;
+
 use Cwd;
 use Data::Rmap qw(:all);
 use File::HomeDir;
@@ -92,3 +87,31 @@ if ($@) {
 eval { $ibank->logout; };
 
 $log->info("End session");
+
+__END__
+
+=head1 SYNOPSIS
+
+First, put your username and password in ~/.app/download-bca.conf, e.g.:
+
+ [ALL]
+ username = ABCDEF0123
+ password = 123456
+
+Then:
+
+ $ download-bca
+
+
+=head1 DESCRIPTION
+
+This is a command-line script which you can run from cron or whatever to
+conveniently download BCA statements. By default, it downloads a month's worth
+of statements. Future version will allow options.
+
+
+=head1 SEE ALSO
+
+L<Finance::Bank::ID::BCA>
+
+=cut
