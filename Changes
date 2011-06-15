@@ -1,5 +1,10 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.19    2011-06-15
+
+        No functional changes. Fixed missing dependencies [CT].
+
+
 0.18    2011-06-10
 
         No functional changes. Moved script from examples/ to bin/.
