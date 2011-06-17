@@ -1,5 +1,10 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.20    2011-06-17
+
+        No functional changes. Add missing dependencies to App::Options [CT].
+
+
 0.19    2011-06-15
 
         No functional changes. Fixed missing dependencies [CT].
