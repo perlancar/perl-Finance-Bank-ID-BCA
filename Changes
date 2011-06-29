@@ -1,5 +1,11 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.21    2011-06-29
+
+        No functional changes. Avoid warning in WWW::Mechanize due to setting
+        an environment variable (HTTPS_CA_DIR) to undef.
+
+
 0.20    2011-06-17
 
         No functional changes. Add missing dependencies to App::Options [CT].
