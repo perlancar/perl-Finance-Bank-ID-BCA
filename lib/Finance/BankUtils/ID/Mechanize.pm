@@ -45,7 +45,7 @@ sub new {
 sub request {
     my ($self, $req) = @_;
     local $ENV{HTTPS_CA_DIR} = $self->{verify_https} ?
-        $self->{https_ca_dir} : undef;
+        $self->{https_ca_dir} : '';
     $log->tracef("HTTPS_CA_DIR = %s", $ENV{HTTPS_CA_DIR});
     if ($self->{verify_https} && $self->{https_host}) {
         $req->header('If-SSL-Cert-Subject',
