@@ -1,33 +1,11 @@
 package Finance::BankUtils::ID::Mechanize;
-# ABSTRACT: A subclass of WWW::Mechanize that does HTTPS certificate verification
-
-=head1 SYNOPSIS
-
- my $mech = Finance::BankUtils::ID::Mechanize->new(
-     verify_https => 1,
-     #https_ca_dir => '/etc/ssl/certs',
-     https_host   => 'example.com',
- );
- # use as you would WWW::Mechanize object ...
-
-=head1 DESCRIPTION
-
-This is a subclass of WWW::Mechanize that does (optional) HTTPS certificate verification.
-
-=cut
 
 use 5.010;
 use Crypt::SSLeay;
 use Log::Any qw($log);
 use base qw(WWW::Mechanize);
 
-=head1 METHODS
-
-=cut
-
-=head2 new()
-
-=cut
+# VERSION
 
 sub new {
     my ($class, %args) = @_;
@@ -37,10 +15,6 @@ sub new {
     $mech->{https_host}   = $args{https_host};
     bless $mech, $class;
 }
-
-=head2 request()
-
-=cut
 
 sub request {
     my ($self, $req) = @_;
@@ -58,3 +32,25 @@ sub request {
 }
 
 1;
+# ABSTRACT: A subclass of WWW::Mechanize that does HTTPS certificate verification
+
+=head1 SYNOPSIS
+
+ my $mech = Finance::BankUtils::ID::Mechanize->new(
+     verify_https => 1,
+     #https_ca_dir => '/etc/ssl/certs',
+     https_host   => 'example.com',
+ );
+ # use as you would WWW::Mechanize object ...
+
+=head1 DESCRIPTION
+
+This is a subclass of WWW::Mechanize that does (optional) HTTPS certificate verification.
+
+=head1 METHODS
+
+=head2 new()
+
+=head2 request()
+
+=cut

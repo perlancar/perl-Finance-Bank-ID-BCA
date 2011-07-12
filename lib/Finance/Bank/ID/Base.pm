@@ -1,16 +1,4 @@
 package Finance::Bank::ID::Base;
-# ABSTRACT: Base class for Finance::Bank::ID::BCA etc
-
-=head1 SYNOPSIS
-
-    # Don't use this module directly, use one of its subclasses instead.
-
-=head1 DESCRIPTION
-
-This module provides a base implementation for L<Finance::Bank::ID::BCA> and
-L<Finance::Bank::ID::Mandiri>.
-
-=cut
 
 use 5.010;
 use Moo;
@@ -19,9 +7,7 @@ use DateTime;
 use Log::Any;
 use Finance::BankUtils::ID::Mechanize;
 
-=head1 ATTRIBUTES
-
-=cut
+# VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -41,12 +27,6 @@ has verify_https => (is => 'rw', default => sub{0});
 has https_ca_dir => (is => 'rw', default => sub{'/etc/ssl/certs'});
 has https_host   => (is => 'rw');
 
-=head1 METHODS
-
-=for Pod::Coverage BUILD
-
-=cut
-
 sub _fmtdate {
     my ($self, $dt) = @_;
     $dt->strftime("%Y-%m-%d");
@@ -63,12 +43,6 @@ sub _stripD {
     $s =~ s/\D+//g;
     $s;
 }
-
-=head2 new(%args)
-
-Create a new instance.
-
-=cut
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -133,83 +107,31 @@ sub _req {
     }
 }
 
-=head2 login()
-
-Login to netbanking site.
-
-=cut
-
 sub login {
     die "Should be implemented by child";
 }
-
-=head2 logout()
-
-Logout from netbanking site.
-
-=cut
 
 sub logout {
     die "Should be implemented by child";
 }
 
-=head2 list_accounts()
-
-List accounts.
-
-=cut
-
 sub list_accounts {
     die "Should be implemented by child";
 }
-
-=head2 check_balance([$acct])
-
-=cut
 
 sub check_balance {
     die "Should be implemented by child";
 }
 
-=head2 get_balance
-
-Synonym for check_balance.
-
-=cut
-
 sub get_balance { check_balance(@_) }
-
-=head2 get_statement(%args)
-
-Get account statement.
-
-=cut
 
 sub get_statement {
     die "Should be implemented by child";
 }
 
-=head2 check_statement
-
-Alias for get_statement
-
-=cut
-
 sub check_statement { get_statement(@_) }
 
-=head2 account_statement
-
-Alias for get_statement
-
-=cut
-
 sub account_statement { get_statement(@_) }
-
-=head2 parse_statement($html_or_text, %opts)
-
-Parse HTML/text into statement data.
-
-=cut
 
 sub parse_statement {
     my ($self, $page, %opts) = @_;
@@ -308,3 +230,62 @@ sub parse_statement {
 }
 
 1;
+# ABSTRACT: Base class for Finance::Bank::ID::BCA etc
+
+=head1 SYNOPSIS
+
+    # Don't use this module directly, use one of its subclasses instead.
+
+
+=head1 DESCRIPTION
+
+This module provides a base implementation for L<Finance::Bank::ID::BCA> and
+L<Finance::Bank::ID::Mandiri>.
+
+
+=head1 ATTRIBUTES
+
+
+=head1 METHODS
+
+=for Pod::Coverage BUILD
+
+=head2 new(%args)
+
+Create a new instance.
+
+=head2 login()
+
+Login to netbanking site.
+
+=head2 logout()
+
+Logout from netbanking site.
+
+=head2 list_accounts()
+
+List accounts.
+
+=head2 check_balance([$acct])
+
+=head2 get_balance
+
+Synonym for check_balance.
+
+=head2 get_statement(%args)
+
+Get account statement.
+
+=head2 check_statement
+
+Alias for get_statement
+
+=head2 account_statement
+
+Alias for get_statement
+
+=head2 parse_statement($html_or_text, %opts)
+
+Parse HTML/text into statement data.
+
+=cut
