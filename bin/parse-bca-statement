@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+
+# workaround for dzil
+package parse_bca_statement;
+
+use 5.010;
+use strict;
+use warnings;
+
+use Finance::Bank::ID::BCA;
+use YAML;
+
+my $ibank = Finance::Bank::ID::BCA->new;
+my $stmt = join "", <>;
+print Dump $ibank->parse_statement($stmt);
+
+1;
+# ABSTRACT: Parse BCA internet banking statement
+
+=head1 SYNOPSIS
+
+ % parse-bca-statement < statement-page
+
+
+=head1 DESCRIPTION
+
+
+=head1 SEE ALSO
+
+L<Finance::Bank::ID::BCA>
+
+=cut
