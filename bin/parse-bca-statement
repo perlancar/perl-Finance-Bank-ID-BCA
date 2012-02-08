@@ -12,7 +12,7 @@ use YAML;
 
 my $ibank = Finance::Bank::ID::BCA->new;
 my $stmt = join "", <>;
-print Dump $ibank->parse_statement($stmt);
+print Dump $ibank->parse_statement($stmt, return_datetime_obj=>0);
 
 1;
 # ABSTRACT: Parse BCA internet banking statement

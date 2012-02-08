@@ -2,9 +2,11 @@ package Finance::Bank::ID::Base;
 
 use 5.010;
 use Moo;
-use Data::Dumper;
-use DateTime;
 use Log::Any;
+
+use Data::Dumper;
+use Data::Rmap qw(:all);
+use DateTime;
 use Finance::BankUtils::ID::Mechanize;
 
 # VERSION
@@ -29,7 +31,12 @@ has https_host   => (is => 'rw');
 
 sub _fmtdate {
     my ($self, $dt) = @_;
-    $dt->strftime("%Y-%m-%d");
+    $dt->ymd;
+}
+
+sub _fmtdt {
+    my ($self, $dt) = @_;
+    $dt->ymd . ' ' . $dt->hms;
 }
 
 sub _dmp {
@@ -225,6 +232,15 @@ sub parse_statement {
 
     $stmt = undef unless $status == 200;
     $self->logger->debug("parse_statement(): Result: ".$self->_dmp($stmt));
+
+    unless ($opts{return_datetime_obj} // 1) {
+        # $_[0]{seen} = {} is a trick to allow multiple places which mention the
+        # same object to be converted (defeat circular checking)
+        rmap_ref {
+            $_[0]{seen} = {};
+            $_ = $self->_fmtdt($_) if UNIVERSAL::isa($_, "DateTime");
+        } $stmt;
+    }
 
     [$status, $error, $stmt];
 }

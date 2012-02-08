@@ -1,7 +1,7 @@
 #!perl -Tw
 
 use strict;
-use Test::More tests => (4*15 + 1*15 + 1*15 + 1*2);
+use Test::More;
 use DateTime;
 use File::Slurp;
 use FindBin '$Bin';
@@ -130,3 +130,9 @@ for my $f (
     is(scalar(@{ $stmt->{skipped_transactions} }), 1,
        "$f->[1] (num skipped tx)");
 }
+
+my $res = $ibank->parse_statement(scalar(read_file("$Bin/data/stmt1.html")), return_datetime_obj=>0);
+my $stmt = $res->[2];
+ok(!ref($stmt->{start_date}), "return_datetime_obj=0 (1)");
+
+done_testing();
