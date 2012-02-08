@@ -435,7 +435,7 @@ sub _ps_get_transactions {
     if ($ibank->logged_in) { $ibank->logout() }
 
     # utility routines
-    my $res = $ibank->parse_statement($html_or_copy_pasted_text);
+    my $res = $ibank->parse_statement($html);
 
 Also see the examples/ subdirectory in the distribution for a sample script
 using this module.
@@ -615,10 +615,10 @@ Saturday/Sunday/holiday, depending on the default value set by the site's form).
 
 See parse_statement() on structure of $stmt.
 
-=head2 parse_statement($html_or_text, %opts) => $res
+=head2 parse_statement($html, %opts) => $res
 
-Given the HTML/copy-pasted text of the account statement results page, parse it
-into structured data:
+Given the HTML text of the account statement results page, parse it into
+structured data:
 
  $stmt = {
     start_date     => $start_dt, # a DateTime object
@@ -650,5 +650,8 @@ Returns:
 
 C<$status> is 200 if successful or some other 3-digit code if parsing failed.
 C<$stmt> is the result (structure as above, or undef if parsing failed).
+
+The method can also handle some copy-pasted text from the GUI browser, but this
+is no longer documented or guaranteed to keep working.
 
 =cut
