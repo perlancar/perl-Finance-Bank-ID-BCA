@@ -1,5 +1,17 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.22    2012-02-08
+
+        - Add script: parse-bca-statement (a simple script that calls
+          parse_statement() and dumps result to YAML)
+
+        - Add option to parse_statement(): return_datetime_obj, to allow
+          returning dates as 'YYYY-MM-DD HH:mm:SS' strings instead of DateTime
+          objects.
+
+        - Add note that parsing copy-pasted text from GUI browser is deprecated.
+
+
 0.21    2011-06-29
 
         No functional changes. Avoid warning in WWW::Mechanize due to setting
