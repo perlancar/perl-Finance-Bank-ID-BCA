@@ -1,5 +1,14 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.23    2012-03-13
+
+        [FIXES]
+
+        - Fix recent few weeks' connection reset problem with KlikBCA servers
+          due to rejection of TE request header. We now instruct LWP to avoid
+          sending TE header.
+
+
 0.22    2012-02-08
 
         - Add script: parse-bca-statement (a simple script that calls
