@@ -10,7 +10,7 @@ use Log::Any '$log';
 extends 'Finance::Bank::ID::Base';
 
 has _variant => (is => 'rw'); # bisnis or perorangan
-has skip_NEXT => (is => 'rw'); # bisnis or perorangan
+has skip_NEXT => (is => 'rw');
 
 sub BUILD {
     my ($self, $args) = @_;
