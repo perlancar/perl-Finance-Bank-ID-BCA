@@ -1,7 +1,6 @@
 package Finance::BankUtils::ID::Mechanize;
 
 use 5.010;
-use Crypt::SSLeay;
 use Log::Any qw($log);
 use base qw(WWW::Mechanize);
 
