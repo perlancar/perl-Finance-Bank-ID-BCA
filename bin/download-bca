@@ -14,6 +14,8 @@ use File::Slurp;
 use Finance::Bank::ID::BCA;
 use YAML;
 
+# VERSION
+
 # we don't use required=>1 because App::Options still works in BEGIN phase and
 # thus breaks perl -c.
 

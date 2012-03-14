@@ -10,6 +10,8 @@ use warnings;
 use Finance::Bank::ID::BCA;
 use YAML;
 
+# VERSION
+
 my $ibank = Finance::Bank::ID::BCA->new;
 my $stmt = join "", <>;
 print Dump $ibank->parse_statement($stmt, return_datetime_obj=>0);
