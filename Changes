@@ -1,5 +1,11 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.24    2012-03-14
+
+        No functional changes. Remove 'use Crypt::SSLeay' statement that causes
+        test failure reports from CT.
+
+
 0.23    2012-03-13
 
         [FIXES]
