@@ -1,5 +1,11 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.25    2012-05-03
+
+        No functional changes whatsoever. Reupload to CPAN since apparently I
+        accidentally deleted the release from CPAN.
+
+
 0.24    2012-03-14
 
         No functional changes. Remove 'use Crypt::SSLeay' statement that causes
