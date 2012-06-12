@@ -470,7 +470,7 @@ perorangan) and not the corporate/business version (KlikBCA bisnis) as the later
 requires VPN and token input on login. But this module can parse statement page
 from both versions.
 
-Warning: This module is neither offical nor is it tested to be 100% save!
+Warning: This module is neither offical nor is it tested to be 100% safe!
 Because of the nature of web-robots, everything may break from one day to the
 other when the underlying web interface changes.
 
