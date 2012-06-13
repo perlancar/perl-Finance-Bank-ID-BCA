@@ -1,8 +1,5 @@
 #!/usr/bin/perl
 
-# workaround for dzil
-package download_bca;
-
 use 5.010;
 use strict;
 use warnings;
@@ -95,7 +92,8 @@ eval { $ibank->logout; };
 
 $log->info("End session");
 
-__END__
+# ABSTRACT: Download BCA statement
+# PODNAME: download-bca
 
 =head1 SYNOPSIS
 
