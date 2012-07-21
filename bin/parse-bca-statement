@@ -5,28 +5,26 @@ use strict;
 use warnings;
 
 use Finance::Bank::ID::BCA;
-use YAML;
+use Perinci::CmdLine;
 
 # VERSION
 
-my $ibank = Finance::Bank::ID::BCA->new;
-my $stmt = join "", <>;
-print Dump $ibank->parse_statement($stmt, return_datetime_obj=>0);
+$SPEC{run} = {
+    summary => 'Parse BCA internet banking system',
+    args => {
+        statement => {
+            schema => 'str*',
+            cmdline_src => 'stdin_or_files',
+        },
+    },
+};
+sub run {
+    my %args = @_;
+
+    my $ibank = Finance::Bank::ID::BCA->new;
+    $ibank->parse_statement($args{statement}, return_datetime_obj=>0);
+}
 
 1;
 # ABSTRACT: Parse BCA internet banking statement
 # PODNAME: parse-bca-statement
-
-=head1 SYNOPSIS
-
- % parse-bca-statement < statement-page
-
-
-=head1 DESCRIPTION
-
-
-=head1 SEE ALSO
-
-L<Finance::Bank::ID::BCA>
-
-=cut
