@@ -458,9 +458,6 @@ If you want to use the library in your Perl application:
     # utility routines
     my $res = $ibank->parse_statement($html);
 
-Also see the examples/ subdirectory in the distribution for a sample script
-using this module.
-
 
 =head1 DESCRIPTION
 
