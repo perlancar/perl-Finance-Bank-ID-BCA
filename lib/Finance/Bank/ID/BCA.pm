@@ -409,6 +409,12 @@ sub _ps_get_transactions {
 
 =head1 SYNOPSIS
 
+If you just want to download banking statements, and you use Linux/Unix, you
+might want to use the L<download-bca> script instead of having to deal with this
+library directly.
+
+If you want to use the library in your Perl application:
+
     use Finance::Bank::ID::BCA;
 
     # FBI::BCA uses Log::Any. to show logs using, e.g., Log4perl:
