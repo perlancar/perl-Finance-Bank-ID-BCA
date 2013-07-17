@@ -1,5 +1,11 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.26    2012-05-03 (SHARYANTO)
+
+        No functional changes. Tweaks to documentation to guide casual new
+        users. Convert download-bca script to use Perinci::CmdLine.
+
+
 0.25    2012-05-03 (SHARYANTO)
 
         No functional changes whatsoever. Reupload to CPAN since apparently I

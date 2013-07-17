@@ -9,6 +9,8 @@ use Perinci::CmdLine;
 
 # VERSION
 
+our %SPEC;
+
 $SPEC{run} = {
     summary => 'Parse BCA internet banking system',
     args => {

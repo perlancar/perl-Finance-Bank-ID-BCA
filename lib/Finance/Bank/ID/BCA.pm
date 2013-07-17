@@ -1,6 +1,6 @@
 package Finance::Bank::ID::BCA;
 
-use 5.010;
+use 5.010001;
 use Moo;
 use DateTime;
 use Log::Any '$log';

@@ -261,6 +261,28 @@ L<Finance::Bank::ID::Mandiri>.
 
 =head1 ATTRIBUTES
 
+=head2 accounts
+
+=head2 https_ca_dir
+
+=head2 https_host
+
+=head2 logged_in
+
+=head2 logger
+
+=head2 logger_dump
+
+=head2 mech
+
+=head2 password
+
+=head2 site
+
+=head2 username
+
+=head2 verify_https
+
 
 =head1 METHODS
 
