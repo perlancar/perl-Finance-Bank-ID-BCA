@@ -1,5 +1,10 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.28    2013-11-03 (SHARYANTO)
+
+        - No functional changes. Relax the request id regex a bit.
+
+
 0.27    2013-11-03 (SHARYANTO)
 
         [NEW FEATURES]
