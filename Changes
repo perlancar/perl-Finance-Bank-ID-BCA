@@ -1,5 +1,21 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.27    2013-11-03 (SHARYANTO)
+
+        [NEW FEATURES]
+
+        - Add simulation mode and save dir, for help in debugging. In
+          non-simulation mode, if save_dir is specified, will save HTTP
+          responses as YAML files in this dir. When in simulation mode, instead
+          of actually sending requests to network, will use this saved
+          responses.
+
+        [ENHANCEMENTS]
+
+        - Get error message from BCA error page, e.g. the "MAAF UNTUK SEMENTARA
+          TRANSAKSI TIDAK DAPAT DILAKUKAN" message.
+
+
 0.26    2013-07-17 (SHARYANTO)
 
         - No functional changes. Tweaks to documentation to guide casual new
