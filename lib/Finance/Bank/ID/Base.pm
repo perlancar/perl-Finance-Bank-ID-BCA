@@ -82,7 +82,7 @@ sub _req {
     }
 
     $opts->{id} or die "BUG: Request does not have id";
-    $opts->{id} =~ /\A\w+\z/ or die "BUG: Invalid syntax in id '$opts->{id}'";
+    $opts->{id} =~ /\A[\w-]+\z/ or die "BUG: Invalid syntax in id '$opts->{id}'";
 
     $self->_set_default_mech unless $self->mech;
     my $mech = $self->mech;
