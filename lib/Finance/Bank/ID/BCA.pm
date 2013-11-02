@@ -107,6 +107,8 @@ sub _check_balances {
                     id => 'check_balance',
                     after_request => sub {
                         my ($mech) = @_;
+                        my $errmsg = $self->_get_bca_errmsg;
+                        return "BCA errmsg: $errmsg" if $errmsg;
                         $mech->content =~ $re or
                             return "can't find balances, maybe page layout changed?";
                         '';
@@ -123,6 +125,16 @@ sub _check_balances {
                  };
     }
     @res;
+}
+
+# parse error message from error page, often shown when we want to check
+# statement or balance.
+sub _get_bca_errmsg {
+    my $self = shift;
+    my $mech = $self->mech;
+    my $ct = $mech->content;
+    $self->logger->error("TMP: 1");
+    return $1 if $ct =~ m!^<font.+?red><b>(.+)</b></font>!m;
 }
 
 sub check_balance {
@@ -150,6 +162,8 @@ sub get_statement {
                     id => 'get_statement_form',
                     after_request => sub {
                         my ($mech) = @_;
+                        my $errmsg = $self->_get_bca_errmsg;
+                        return "BCA errmsg: $errmsg" if $errmsg;
                         $mech->content =~ /<form/i or
                             return "no form found, maybe we got logged out?";
                         '';
@@ -244,7 +258,9 @@ sub get_statement {
                     id => 'get_statement',
                     after_request => sub {
                         my ($mech) = @_;
-                        ''; # XXX check for error
+                        my $errmsg = $self->_get_bca_errmsg;
+                        return "BCA errmsg: $errmsg" if $errmsg;
+                        '';
                     },
                 });
     my $parse_opts = $args{parse_opts} // {};
