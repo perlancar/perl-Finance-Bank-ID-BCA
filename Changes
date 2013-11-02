@@ -2,20 +2,20 @@ Revision history for Finance-Bank-ID-BCA
 
 0.26    2013-07-17 (SHARYANTO)
 
-        No functional changes. Tweaks to documentation to guide casual new
-        users. Convert download-bca script to use Perinci::CmdLine.
+        - No functional changes. Tweaks to documentation to guide casual new
+          users. Convert download-bca script to use Perinci::CmdLine.
 
 
 0.25    2012-05-03 (SHARYANTO)
 
-        No functional changes whatsoever. Reupload to CPAN since apparently I
-        accidentally deleted the release from CPAN.
+        - No functional changes whatsoever. Reupload to CPAN since apparently I
+          accidentally deleted the release from CPAN.
 
 
 0.24    2012-03-14 (SHARYANTO)
 
-        No functional changes. Remove 'use Crypt::SSLeay' statement that causes
-        test failure reports from CT.
+        - No functional changes. Remove 'use Crypt::SSLeay' statement that
+          causes test failure reports from CT.
 
 
 0.23    2012-03-13 (SHARYANTO)
@@ -41,77 +41,111 @@ Revision history for Finance-Bank-ID-BCA
 
 0.21    2011-06-29 (SHARYANTO)
 
-        No functional changes. Avoid warning in WWW::Mechanize due to setting
-        an environment variable (HTTPS_CA_DIR) to undef.
+        - No functional changes. Avoid warning in WWW::Mechanize due to setting
+          an environment variable (HTTPS_CA_DIR) to undef.
 
 
 0.20    2011-06-17 (SHARYANTO)
 
-        No functional changes. Add missing dependencies to App::Options [CT].
+        - No functional changes. Add missing dependencies to App::Options [CT].
 
 
 0.19    2011-06-15 (SHARYANTO)
 
-        No functional changes. Fixed missing dependencies [CT].
+        - No functional changes. Fixed missing dependencies [CT].
 
 
 0.18    2011-06-10 (SHARYANTO)
 
-        No functional changes. Moved script from examples/ to bin/.
+        - No functional changes. Moved script from examples/ to bin/.
 
 
 0.17    2011-03-08 (SHARYANTO)
+
         - switch from Moose to Moo
 
+
 0.16    2010-12-21 (SHARYANTO)
+
         - more helpful error messages when checking total debit/credit
 
+
 0.15    2010-12-16 (SHARYANTO)
+
         - add skip_NEXT
 
+
 0.14    2010-12-03 (SHARYANTO)
+
         - change example script to use Log::Any::App
 
+
 0.13    2010-10-14 (SHARYANTO)
+
         - also count skipped transactions when totalling debit/credit
 
+
 0.12    2010-09-23 (SHARYANTO)
+
         - enable verify_https in example script
+
         - minor doc update
 
+
 0.10    2010-09-23 (SHARYANTO)
+
         - add verify_https option (suggested by William Shallum, RT#61409)
 
+
 0.09    2010-06-17 (SHARYANTO)
+
         - build fixes
 
+
 0.08    2010-06-11 (SHARYANTO)
-        - INCOMPATIBLE CHANGE: parse_statement now always returns
-          3-element arrayref instead of depending on list/scalar
-          context. Sorry for this, I'm trying make all my HTTP-style
-          interface consistent.
+
+        - INCOMPATIBLE CHANGE: parse_statement now always returns 3-element
+          arrayref instead of depending on list/scalar context. Sorry for this,
+          I'm trying make all my HTTP-style interface consistent.
+
 
 0.07    2010-02-17 (SHARYANTO)
-        - switch from Moose to Any::Moose (+Mouse as dependency)
+
+        - Switch from Moose to Any::Moose (+Mouse as dependency)
+
 
 0.06    2010-01-13 (SHARYANTO)
-        - remove "use Log::Log4perl" in test script
+
+        - Remove "use Log::Log4perl" in test script
+
 
 0.05    2010-01-07 (SHARYANTO)
-        - switch from Log::Log4perl to Log::Any
-        - switch from MakeMaker to Module::Builder
+
+        - Switch from Log::Log4perl to Log::Any
+
+        - Switch from MakeMaker to Module::Builder
+
 
 0.04    2009-11-26 (SHARYANTO)
-        - handle float round-off error on matching total credit vs debit
+
+        - Handle float round-off error on matching total credit vs debit.
+
 
 0.03    2009-11-11 (SHARYANTO)
+
         - Now also parses copy-pasted text from Chrome (4.0 Linux) for KlikBCA
           Personal.
+
         - BIAYA ADM is also possible outside Mon-Fri for Personal accounts.
 
+
 0.02    2009-10-20 (SHARYANTO)
+
         - Now also parses the English version of KlikBCA Personal.
+
         - A few minor fixes.
 
+
 0.01    2009-10-14 (SHARYANTO)
-        First release.
+
+        - First release.
