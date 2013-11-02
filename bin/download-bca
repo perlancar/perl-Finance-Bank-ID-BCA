@@ -9,7 +9,7 @@ use File::HomeDir;
 use File::Path;
 use File::Slurp;
 use Finance::Bank::ID::BCA;
-use YAML;
+use YAML::Syck;
 
 # VERSION
 
@@ -26,6 +26,9 @@ use App::Options (
                        default => File::HomeDir->my_home . "/bca" },
         log_dir   => { type => 'string',   # req
                        default => File::HomeDir->my_home . "/bca/logs" },
+        save_dir  => { type => 'string',   # req
+                       default => File::HomeDir->my_home . "/bca/logs/save" },
+        mode      => { type => 'string', default => '' },
         days      => { type => 'string', default => 31 },
     },
 );
@@ -56,11 +59,13 @@ die "Can't create data_dir `$App::options{data_dir}'" unless (-d $App::options{d
 $log->info("Start session");
 
 my $ibank = Finance::Bank::ID::BCA->new(
-    username    => $App::options{username},
-    password    => $App::options{password},
-    logger      => $log,
-    logger_dump => Log::Any->get_logger(category => "Dumps"),
+    username     => $App::options{username},
+    password     => $App::options{password},
+    logger       => $log,
+    logger_dump  => Log::Any->get_logger(category => "Dumps"),
     verify_https => 1,
+    save_dir     => $App::options{save_dir},
+    mode         => $App::options{mode},
 );
 
 eval {

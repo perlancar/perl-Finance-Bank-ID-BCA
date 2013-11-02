@@ -2,7 +2,7 @@ package Finance::BankUtils::ID::Mechanize;
 
 use 5.010;
 use Log::Any qw($log);
-use base qw(WWW::Mechanize);
+use parent qw(WWW::Mechanize);
 
 # VERSION
 
@@ -15,8 +15,13 @@ sub new {
     bless $mech, $class;
 }
 
-sub request {
-    my ($self, $req) = @_;
+# will be set by some other code, and will be immadiately consumed and emptied
+# by _make_request().
+our $saved_resp;
+
+sub _make_request {
+    my $self = shift;
+    my $req = shift;
     local $ENV{HTTPS_CA_DIR} = $self->{verify_https} ?
         $self->{https_ca_dir} : '';
     $log->tracef("HTTPS_CA_DIR = %s", $ENV{HTTPS_CA_DIR});
@@ -25,13 +30,20 @@ sub request {
                      qr!\Q/CN=$self->{https_host}\E(/|$)!);
     }
     $log->trace('Mech request: ' . $req->headers_as_string);
-    my $resp = $self->SUPER::request($req);
-    $log->trace('Mech response: ' . $resp->headers_as_string);
+    my $resp;
+    if ($saved_resp) {
+        $resp = $saved_resp;
+        $saved_resp = undef;
+        $log->trace('Mech response (from saved): ' . $resp->headers_as_string);
+    } else {
+        $resp = $self->SUPER::_make_request($req, @_);
+        $log->trace('Mech response: ' . $resp->headers_as_string);
+    }
     $resp;
 }
 
 1;
-# ABSTRACT: A subclass of WWW::Mechanize that does HTTPS certificate verification
+# ABSTRACT: A subclass of WWW::Mechanize
 
 =head1 SYNOPSIS
 
@@ -42,9 +54,21 @@ sub request {
  );
  # use as you would WWW::Mechanize object ...
 
+
 =head1 DESCRIPTION
 
-This is a subclass of WWW::Mechanize that does (optional) HTTPS certificate verification.
+This is a subclass of WWW::Mechanize that can do some extra stuffs:
+
+=over
+
+=item * HTTPS certificate verification
+
+=item * use saved response from a file
+
+=item * log using Log::ny
+
+=back
+
 
 =head1 METHODS
 

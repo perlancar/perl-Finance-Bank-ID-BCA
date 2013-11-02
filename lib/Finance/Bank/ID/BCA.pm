@@ -41,7 +41,7 @@ sub login {
     die "400 Password not supplied" unless $self->password;
 
     $self->logger->debug('Logging in ...');
-    $self->_req(get => [$s]);
+    $self->_req(get => [$s], {id=>'login_form'});
     $self->_req(submit_form => [
                                 form_number => 1,
                                 fields => {'value(user_id)'=>$self->username,
@@ -49,16 +49,19 @@ sub login {
                                            },
                                 button => 'value(Submit)',
                                 ],
-                sub {
-                    my ($mech) = @_;
-                    $mech->content =~ /var err='(.+?)'/ and return $1;
-                    $mech->content =~ /=logout"/ and return;
-                    "unknown login result page";
-                }
-                                );
+                {
+                    id => 'login',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        $mech->content =~ /var err='(.+?)'/ and return $1;
+                        $mech->content =~ /=logout"/ and return;
+                        "unknown login result page";
+                    },
+                });
     $self->logged_in(1);
-    $self->_req(get => ["$s/authentication.do?value(actions)=welcome"]);
-    #$self->_req(get => ["$s/nav_bar_indo/menu_nav.htm"]); # failed?
+    $self->_req(get => ["$s/authentication.do?value(actions)=welcome"],
+                {id=>'welcome'});
+    #$self->_req(get => ["$s/nav_bar_indo/menu_nav.htm"], {id=>'navbar'}); # failed?
 }
 
 sub logout {
@@ -66,14 +69,16 @@ sub logout {
 
     return 1 unless $self->logged_in;
     $self->logger->debug('Logging out ...');
-    $self->_req(get => [$self->site . "/authentication.do?value(actions)=logout"]);
+    $self->_req(get => [$self->site . "/authentication.do?value(actions)=logout"],
+                {id=>'logout'});
     $self->logged_in(0);
 }
 
 sub _menu {
     my ($self) = @_;
     my $s = $self->site;
-    $self->_req(get => ["$s/nav_bar_indo/account_information_menu.htm"]);
+    $self->_req(get => ["$s/nav_bar_indo/account_information_menu.htm"],
+                {id=>'accinfo_menu'});
 }
 
 sub list_accounts {
@@ -98,13 +103,15 @@ sub _check_balances {
     $self->login;
     $self->_menu;
     $self->_req(post => ["$s/balanceinquiry.do"],
-                sub {
-                    my ($mech) = @_;
-                    $mech->content =~ $re or
-                        return "can't find balances, maybe page layout changed?";
-                    '';
-                }
-    );
+                {
+                    id => 'check_balance',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        $mech->content =~ $re or
+                            return "can't find balances, maybe page layout changed?";
+                        '';
+                    },
+                });
 
     my @res;
     my $content = $self->mech->content;
@@ -139,11 +146,14 @@ sub get_statement {
     $self->logger->info("Getting statement for ".
         ($args{account} ? "account `$args{account}'" : "default account")." ...");
     $self->_req(post => ["$s/accountstmt.do?value(actions)=acct_stmt"],
-                sub {
-                    my ($mech) = @_;
-                    $mech->content =~ /<form/i or
-                        return "no form found, maybe we got logged out?";
-                    '';
+                {
+                    id => 'get_statement_form',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        $mech->content =~ /<form/i or
+                            return "no form found, maybe we got logged out?";
+                        '';
+                    },
                 });
 
     my $form = $self->mech->form_number(1);
@@ -230,9 +240,12 @@ sub get_statement {
                                     "value(endYr)" => $end_dt->year,
                                           },
                                 ],
-                sub {
-                    my ($mech) = @_;
-                    ''; # XXX check for error
+                {
+                    id => 'get_statement',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        ''; # XXX check for error
+                    },
                 });
     my $parse_opts = $args{parse_opts} // {};
     my $resp = $self->parse_statement($self->mech->content, %$parse_opts);
