@@ -133,7 +133,6 @@ sub _get_bca_errmsg {
     my $self = shift;
     my $mech = $self->mech;
     my $ct = $mech->content;
-    $self->logger->error("TMP: 1");
     return $1 if $ct =~ m!^<font.+?red><b>(.+)</b></font>!m;
 }
 
