@@ -1,9 +1,10 @@
-#!perl -Tw
+#!perl
 
+use 5.010001;
 use strict;
-use Test::More;
+use Test::More 0.98;
 use DateTime;
-use File::Slurp;
+use File::Slurp::Tiny qw(read_file);
 use FindBin '$Bin';
 
 use Finance::Bank::ID::BCA;

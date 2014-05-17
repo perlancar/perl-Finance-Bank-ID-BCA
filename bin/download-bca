@@ -7,7 +7,7 @@ use warnings;
 use Cwd;
 use File::HomeDir;
 use File::Path;
-use File::Slurp;
+use File::Slurp::Tiny qw(write_file);
 use Finance::Bank::ID::BCA;
 use YAML::Syck;
 
