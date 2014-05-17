@@ -1,8 +1,17 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.29    2014-05-17 (SHARYANTO)
+
+        - No functional changes.
+
+        - Replace File::Slurp with File::Slurp::Tiny.
+
+
 0.28    2013-11-03 (SHARYANTO)
 
-        - No functional changes. Relax the request id regex a bit.
+        - No functional changes.
+
+        - Relax the request id regex a bit.
 
 
 0.27    2013-11-03 (SHARYANTO)

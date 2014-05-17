@@ -1,9 +1,13 @@
-#!perl -Tw
+#!perl
 
 BEGIN {
     unless ($ENV{RELEASE_TESTING}) {
         require Test::More;
         Test::More::plan(skip_all => 'these tests are for release candidate testing');
+    }
+    if ($ENV{OFFLINE}) {
+        require Test::More;
+        Test::More::plan(skip_all => 'offline');
     }
 }
 
