@@ -1,126 +1,147 @@
 #!perl
 
+# DATE
+# VERSION
+
 use 5.010;
 use strict;
 use warnings;
+use Log::Any '$log';
 
-use Cwd;
-use File::HomeDir;
-use File::Path;
-use File::Slurp::Tiny qw(write_file);
-use Finance::Bank::ID::BCA;
-use YAML::Syck;
+our %SPEC;
 
-# VERSION
-
-# we don't use required=>1 because App::Options still works in BEGIN phase and
-# thus breaks perl -c.
-
-use App::Options (
-    option => {
-        profile   => { type => 'string', default => 'default' },
-        account   => { type => 'string', default => "" },
-        username  => { type => 'string' }, # req
-        password  => { type => 'string' }, # req
-        data_dir  => { type => 'string',   # req
-                       default => File::HomeDir->my_home . "/bca" },
-        log_dir   => { type => 'string',   # req
-                       default => File::HomeDir->my_home . "/bca/logs" },
-        save_dir  => { type => 'string',   # req
-                       default => File::HomeDir->my_home . "/bca/logs/save" },
-        mode      => { type => 'string', default => '' },
-        days      => { type => 'string', default => 31 },
+$SPEC{download_bca} = {
+    v => 1.1,
+    args => {
+        account   => {schema=>'str*', req=>1},
+        username  => {schema=>'str*', req=>1},
+        password  => {schema=>'str*', req=>1},
+        data_dir  => {schema=>'str*'},
+        log_dir   => {schema=>'str*'},
+        save_dir  => {schema=>'str*'},
+        mode      => {
+            summary=>'Passed to Finance::Bank::ID::BCA constructor',
+            schema=>'str*',
+            default=>'',
+        },
+        days      => {schema=>'int*', default=>31},
     },
-);
+};
+sub download_bca {
+    require File::HomeDir;
 
-use vars qw($Log_Level);
-BEGIN { $Log_Level = "debug" }
+    my %args = @_;
 
-use Log::Any::App '$log',
-    -category_level => {Dumps=>'off'},
-    -file           => {
-        path           => "$App::options{log_dir}/main.log",
-    },
-    -dir            => {
-        path           => "$App::options{log_dir}/dumps",
-        level          => 'off',
-        # currently we always dump, Log::Any::App > 0.23 will support specifying
-        # sub { ... } to refer to general level
-        category_level => {Dumps => 'trace'},
+    my $data_dir = $args{data_dir} // File::HomeDir->my_home . "/bca";
+    my $log_dir  = $args{log_dir}  // File::HomeDir->my_home . "/bca/logs";
+    my $save_dir = $args{save_dir} // File::HomeDir->my_home . "/bca/logs/save";
+
+    require Log::Any::App;
+    Log::Any::App::init([
+        -category_level => {Dumps=>'off'},
+        -file           => {
+            path           => "$log_dir/main.log",
+        },
+        -dir            => {
+            path           => "$log_dir/dumps",
+            level          => 'off',
+            # currently we always dump, Log::Any::App > 0.23 will support
+            # specifying sub { ... } to refer to general level
+            category_level => {Dumps => 'trace'},
+        },
+    ]);
+
+    require File::Path;
+    File::Path::mkpath($data_dir) unless -d $data_dir;
+    die "Can't create data_dir `$data_dir'" unless -d $data_dir;
+
+    $log->info("Start session");
+
+    require Finance::Bank::ID::BCA;
+    my $ibank = Finance::Bank::ID::BCA->new(
+        username     => $args{username},
+        password     => $args{password},
+        logger       => $log,
+        logger_dump  => Log::Any->get_logger(category => "Dumps"),
+        verify_https => 1,
+        save_dir     => $save_dir,
+        mode         => $args{mode},
+    );
+
+    eval {
+        my @bal = $ibank->_check_balances;
+        $log->debug("Balances: ".$ibank->_dmp(\@bal));
+
+        my $stmt = $ibank->get_statement(
+            account    => $args{account},
+            days       => $args{days},
+            parse_opts => {return_datetime_obj=>0},
+        );
+        my $filename = sprintf("%s/bca.statement.%s.%s.to.%s.yaml",
+                               $data_dir,
+                               $stmt->{account},
+                               $stmt->{start_date},
+                               $stmt->{end_date});
+        $filename =~ s/[: ]//g; # : is for windows
+        $log->info("Writing statements to YAML file `$filename' ...");
+        require File::Slurp::Tiny;
+        require YAML::Syck;
+        File::Slurp::Tiny::write_file($filename, YAML::Syck::Dump($stmt));
     };
 
-for (qw/username password data_dir log_dir/) {
-    defined($App::options{$_}) or die "Missing required argument: $_\n";
+    if ($@) {
+        $log->error("die: $@");
+    }
+
+    # no matter what, try to logout so we're not locked out for 10 minutes,
+    # annoying
+    eval { $ibank->logout };
+
+    $log->info("End session");
+    [200];
 }
 
-mkpath($App::options{data_dir})                       unless (-d $App::options{data_dir});
-die "Can't create data_dir `$App::options{data_dir}'" unless (-d $App::options{data_dir});
-
-$log->info("Start session");
-
-my $ibank = Finance::Bank::ID::BCA->new(
-    username     => $App::options{username},
-    password     => $App::options{password},
-    logger       => $log,
-    logger_dump  => Log::Any->get_logger(category => "Dumps"),
-    verify_https => 1,
-    save_dir     => $App::options{save_dir},
-    mode         => $App::options{mode},
-);
-
-eval {
-    my @bal = $ibank->_check_balances;
-    $log->debug("Balances: ".$ibank->_dmp(\@bal));
-
-    my $stmt = $ibank->get_statement(
-        account => $App::options{account},
-        days => $App::options{days},
-        parse_opts => {return_datetime_obj=>0},
-    );
-    my $filename = sprintf "%s/bca.statement.%s.%s.to.%s.yaml",
-        $App::options{data_dir},
-        $stmt->{account},
-        $stmt->{start_date},
-        $stmt->{end_date};
-    $filename =~ s/[: ]//g; # : is for windows
-    $log->info("Writing statements to YAML file `$filename' ...");
-
-    write_file($filename, Dump($stmt));
-};
-
-if ($@) {
-    $log->error("die: $@");
-}
-
-# no matter what, try to logout so we're not locked out for 10 minutes, annoying
-eval { $ibank->logout; };
-
-$log->info("End session");
+require Perinci::CmdLine;
+Perinci::CmdLine->new(url => '/main/download_bca')->run;
 
 # ABSTRACT: Download BCA statement
 # PODNAME: download-bca
 
 =head1 SYNOPSIS
 
-First, put your username and password in ~/.app/download-bca.conf, e.g.:
+First, put your username and password in C<~/download-bca.conf>, e.g.:
 
- [ALL]
- username = ABCDEF0123
- password = 123456
+ username=ABCDEF0123
+ password=123456
 
 Then:
 
- $ download-bca
+ % download-bca
 
-Get your statements in data dir (defaults to ~/bca). See logs in your log dir
-(defaults to ~/bca/logs).
+Or, if you want to store multiple profiles in the configuration:
+
+ [steven]
+ username=steven0123
+ password=123456
+
+ [rudi]
+ username=rudito0123
+ password=123456
+
+Then:
+
+ % download-bca --config-profile steven
+
+Get your statements in data dir (defaults to C<~/bca>). See logs in your log dir
+(defaults to C<~/bca/logs>).
 
 
 =head1 DESCRIPTION
 
 This is a command-line script which you can run from cron or whatever to
 conveniently download BCA statements. By default, it downloads 31 day's worth of
-statements to ~/bca/. To change this, use --days and --data_dir options.
+statements to C<~/bca/>. To change this, use C<--days> and C<--data-dir>
+options.
 
 
 =head1 SEE ALSO
