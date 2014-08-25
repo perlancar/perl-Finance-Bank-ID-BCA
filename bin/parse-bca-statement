@@ -1,13 +1,14 @@
 #!perl
 
+# DATE
+# VERSION
+
 use 5.010;
 use strict;
 use warnings;
 
 use Finance::Bank::ID::BCA;
-use Perinci::CmdLine;
-
-# VERSION
+use Perinci::CmdLine::Any;
 
 our %SPEC;
 
@@ -27,6 +28,7 @@ sub run {
     $ibank->parse_statement($args{statement}, return_datetime_obj=>0);
 }
 
-1;
+Perinci::CmdLine::Any->new(url => '/main/run')->run;
+
 # ABSTRACT: Parse BCA internet banking statement
 # PODNAME: parse-bca-statement
