@@ -13,7 +13,7 @@ use Perinci::CmdLine::Any;
 our %SPEC;
 
 $SPEC{run} = {
-    summary => 'Parse BCA internet banking system',
+    summary => 'Parse BCA internet banking statement',
     args => {
         statement => {
             schema => 'str*',
