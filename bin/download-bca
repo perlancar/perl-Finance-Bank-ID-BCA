@@ -13,9 +13,9 @@ our %SPEC;
 $SPEC{download_bca} = {
     v => 1.1,
     args => {
-        account   => {schema=>'str*', req=>1},
         username  => {schema=>'str*', req=>1},
         password  => {schema=>'str*', req=>1},
+        account   => {schema=>'str*'},
         data_dir  => {schema=>'str*'},
         log_dir   => {schema=>'str*'},
         save_dir  => {schema=>'str*'},
@@ -36,6 +36,8 @@ sub download_bca {
     my $log_dir  = $args{log_dir}  // File::HomeDir->my_home . "/bca/logs";
     my $save_dir = $args{save_dir} // File::HomeDir->my_home . "/bca/logs/save";
 
+    local $ENV{SCREEN_LOG_LEVEL} = 'debug'
+        if (-t STDOUT) && !$ENV{SCREEN_LOG_LEVEL};
     require Log::Any::App;
     Log::Any::App::init([
         -category_level => {Dumps=>'off'},
