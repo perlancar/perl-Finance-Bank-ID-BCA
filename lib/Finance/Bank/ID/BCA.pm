@@ -402,7 +402,7 @@ sub _ps_get_transactions {
 
         if ($self->_variant eq 'perorangan' &&
             $tx->{date}->dow =~ /6|7/ &&
-            $tx->{description} !~ /^(BIAYA ADM|BUNGA|CR KOREKSI BUNGA|PAJAK BUNGA)$/) {
+            $tx->{description} !~ /^(BIAYA ADM|BUNGA|(CR|DR) KOREKSI BUNGA|PAJAK BUNGA)$/) {
             return "check failed in tx#$i: In KlikBCA Perorangan, all ".
                 "transactions must not be in Sat/Sun except for Interest and ".
                 "Admin Fee: $tx->{description} ($tx->{date})";
@@ -412,7 +412,7 @@ sub _ps_get_transactions {
 
         if ($self->_variant eq 'bisnis' &&
             $tx->{date}->dow =~ /6|7/ &&
-            $tx->{description} !~ /^(BIAYA ADM|BUNGA|CR KOREKSI BUNGA|PAJAK BUNGA)$/) {
+            $tx->{description} !~ /^(BIAYA ADM|BUNGA|(CR|DR) KOREKSI BUNGA|PAJAK BUNGA)$/) {
             return "check failed in tx#$i: In KlikBCA Bisnis, all ".
                 "transactions must not be in Sat/Sun except for Interest and ".
                 "Admin Fee";
