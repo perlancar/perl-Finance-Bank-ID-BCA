@@ -405,7 +405,7 @@ sub _ps_get_transactions {
             $tx->{description} !~ /^(BIAYA ADM|BUNGA|CR KOREKSI BUNGA|PAJAK BUNGA)$/) {
             return "check failed in tx#$i: In KlikBCA Perorangan, all ".
                 "transactions must not be in Sat/Sun except for Interest and ".
-                "Admin Fee";
+                "Admin Fee: $tx->{description} ($tx->{date})";
             # note: in Tahapan perorangan, BIAYA ADM is set on
             # Fridays, but for Tapres (?) on last day of the month
         }
