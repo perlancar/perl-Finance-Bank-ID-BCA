@@ -1,5 +1,11 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.31    2014-09-09 (PERLANCAR)
+
+        - Update regex of Sun/Sat transaction list. There is now "DR KOREKSI
+          BUNGA" (aside from "CR KOREKSI BUNGA").
+
+
 0.30    2014-08-26 (SHARYANTO)
 
         - bin/download-bca: Replace App::Options with Perinci::CmdLine. Location
