@@ -125,17 +125,17 @@ Then:
 
 Or, if you want to store multiple profiles in the configuration:
 
- [steven]
- username=steven0123
+ [jajang]
+ username=jajang0123
  password=123456
 
- [rudi]
- username=rudito0123
+ [saidah]
+ username=saidah0123
  password=123456
 
 Then:
 
- % download-bca --config-profile steven
+ % download-bca --config-profile jajang
 
 Get your statements in data dir (defaults to C<~/bca>). See logs in your log dir
 (defaults to C<~/bca/logs>).
