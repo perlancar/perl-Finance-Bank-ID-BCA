@@ -522,10 +522,6 @@ GUARANTEE>, explicit or implied.
 
 Most methods die() when encountering errors, so you can use eval() to trap them.
 
-This module uses L<Log::Any>, so you can see more debugging statements
-on your screen, log files, etc. See the Log::Any documentation on how
-to do that.
-
 Full response headers and bodies are dumped to a separate logger. See
 documentation on C<new()> below and the sample script in examples/ subdirectory
 in the distribution.
