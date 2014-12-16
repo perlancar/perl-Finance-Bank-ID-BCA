@@ -12,6 +12,7 @@ our %SPEC;
 
 $SPEC{download_bca} = {
     v => 1.1,
+    summary => 'Download BCA statement',
     args => {
         username  => {schema=>'str*', req=>1},
         password  => {schema=>'str*', req=>1},
@@ -109,7 +110,7 @@ Perinci::CmdLine->new(
     log_any_app => 0, # because we'll init ourselves inside download_bca()
 )->run;
 
-# ABSTRACT: Download BCA statement
+# ABSTRACT:
 # PODNAME:
 
 =head1 SYNOPSIS

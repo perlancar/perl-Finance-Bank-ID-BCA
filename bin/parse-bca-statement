@@ -30,5 +30,5 @@ sub run {
 
 Perinci::CmdLine::Any->new(url => '/main/run')->run;
 
-# ABSTRACT: Parse BCA internet banking statement
+# ABSTRACT:
 # PODNAME:
