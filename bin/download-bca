@@ -110,7 +110,7 @@ Perinci::CmdLine->new(
 )->run;
 
 # ABSTRACT: Download BCA statement
-# PODNAME: download-bca
+# PODNAME:
 
 =head1 SYNOPSIS
 
