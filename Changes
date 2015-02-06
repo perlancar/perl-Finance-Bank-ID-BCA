@@ -1,5 +1,12 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.33    2015-02-06 (PERLANCAR)
+
+	- No functional changes.
+
+	- Adjust to Perinci::CmdLine -> Perinci::CmdLine::Classic.
+
+
 0.32    2014-12-10 (PERLANCAR)
 
 	- No functional changes.
