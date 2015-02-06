@@ -104,8 +104,8 @@ sub download_bca {
     [200];
 }
 
-require Perinci::CmdLine;
-Perinci::CmdLine->new(
+require Perinci::CmdLine::Classic;
+Perinci::CmdLine::Classic->new(
     url => '/main/download_bca',
     log_any_app => 0, # because we'll init ourselves inside download_bca()
 )->run;

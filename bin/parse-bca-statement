@@ -13,6 +13,7 @@ use Perinci::CmdLine::Any;
 our %SPEC;
 
 $SPEC{run} = {
+    v => 1.1,
     summary => 'Parse BCA internet banking statement',
     args => {
         statement => {
