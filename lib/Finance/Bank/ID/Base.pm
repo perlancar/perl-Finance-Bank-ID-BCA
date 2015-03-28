@@ -1,5 +1,8 @@
 package Finance::Bank::ID::Base;
 
+# DATE
+# VERSION
+
 use 5.010;
 use Moo;
 use Log::Any;
@@ -9,8 +12,6 @@ use Data::Rmap qw(:all);
 use DateTime;
 use Finance::BankUtils::ID::Mechanize;
 use YAML::Syck qw(LoadFile DumpFile);
-
-# VERSION
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -39,7 +40,7 @@ sub _fmtdate {
 
 sub _fmtdt {
     my ($self, $dt) = @_;
-    $dt->ymd . ' ' . $dt->hms;
+    $dt->datetime;
 }
 
 sub _dmp {
