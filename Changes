@@ -1,5 +1,12 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.34    2015-03-28 (PERLANCAR)
+
+	- [Incompatible change] Become more standard by formatting datetime
+	  as iso8601 (2001-02-03T04:05:06) instead of '2001-02-03
+	  04:05:06'.
+
+
 0.33    2015-02-06 (PERLANCAR)
 
 	- No functional changes.
