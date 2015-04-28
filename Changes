@@ -1,5 +1,13 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.35    2015-04-28 (PERLANCAR)
+
+	- No functional changes.
+
+	- Split CLIs to its own dist: App-IndonesianBankingUtils to reduce
+	  deps.
+
+
 0.34    2015-03-28 (PERLANCAR)
 
 	- [Incompatible change] Become more standard by formatting datetime
