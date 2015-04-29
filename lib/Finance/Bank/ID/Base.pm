@@ -5,7 +5,7 @@ package Finance::Bank::ID::Base;
 
 use 5.010;
 use Moo;
-use Log::Any;
+use Log::Any '$log';
 
 use Data::Dumper;
 use Data::Rmap qw(:all);
@@ -188,11 +188,10 @@ sub parse_statement {
                 }
             }
             if (abs($na-$nb) >= 0.01) {
-                $status = 400;
-                $error = "Check failed: total debit do not match ".
-                    "($na in summary line vs $nb when totalled from ".
-                        "$ntx transactions(s))";
-                last;
+                $log->warn(
+                    "Check failed: total debit do not match ".
+                        "($na in summary line vs $nb when totalled from ".
+                        "$ntx transactions(s))");
             }
         }
         if (defined($stmt->{_total_credit_in_stmt})) {
@@ -206,11 +205,10 @@ sub parse_statement {
                 }
             }
             if (abs($na-$nb) >= 0.01) {
-                $status = 400;
-                $error = "Check failed: total credit do not match ".
-                    "($na in summary line vs $nb when totalled from ".
-                        "$ntx transactions(s))";
-                last;
+                $log->warn(
+                    "Check failed: total credit do not match ".
+                        "($na in summary line vs $nb when totalled from ".
+                        "$ntx transactions(s))");
             }
         }
         if (defined($stmt->{_num_debit_tx_in_stmt})) {
