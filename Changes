@@ -1,5 +1,13 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.36    2015-04-29 (PERLANCAR)
+
+	- (Temporarily) downgrade total credit/debit check (sometimes the
+	  statement returned by the server fails this check, e.g. probably
+	  when the total credit already includes a transaction, but that
+	  transaction has not shown up in the statement).
+
+
 0.35    2015-04-28 (PERLANCAR)
 
 	- No functional changes.
