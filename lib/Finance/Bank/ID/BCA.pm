@@ -402,20 +402,20 @@ sub _ps_get_transactions {
 
         if ($self->_variant eq 'perorangan' &&
             $tx->{date}->dow =~ /6|7/ &&
-            $tx->{description} !~ /^(BIAYA ADM|BUNGA|(CR|DR) KOREKSI BUNGA|PAJAK BUNGA)$/) {
+            $tx->{description} !~ /^(BIAYA ADM|BUNGA|(CR|DR) KOREKSI BUNGA|PAJAK BUNGA)\s*$/) {
             return "check failed in tx#$i: In KlikBCA Perorangan, all ".
                 "transactions must not be in Sat/Sun except for Interest and ".
-                "Admin Fee: $tx->{description} ($tx->{date})";
+                "Admin Fee: <$tx->{description}> ($tx->{date})";
             # note: in Tahapan perorangan, BIAYA ADM is set on
             # Fridays, but for Tapres (?) on last day of the month
         }
 
         if ($self->_variant eq 'bisnis' &&
             $tx->{date}->dow =~ /6|7/ &&
-            $tx->{description} !~ /^(BIAYA ADM|BUNGA|(CR|DR) KOREKSI BUNGA|PAJAK BUNGA)$/) {
+            $tx->{description} !~ /^(BIAYA ADM|BUNGA|(CR|DR) KOREKSI BUNGA|PAJAK BUNGA)\s*$/) {
             return "check failed in tx#$i: In KlikBCA Bisnis, all ".
                 "transactions must not be in Sat/Sun except for Interest and ".
-                "Admin Fee";
+                "Admin Fee: <$tx->{description}> ($tx->{date})";
             # note: in KlikBCA bisnis, BIAYA ADM is set on the last day of the
             # month, regardless of whether it's Sat/Sun or not
         }
