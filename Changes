@@ -8,9 +8,14 @@ Revision history for Finance-Bank-ID-BCA
 0.36    2015-04-29 (PERLANCAR)
 
 	- (Temporarily) downgrade total credit/debit check (sometimes the
-	  statement returned by the server fails this check, e.g. probably
-	  when the total credit already includes a transaction, but that
-	  transaction has not shown up in the statement).
+	  statement returned by the server fails this check, e.g. probably when
+	  the total credit already includes a transaction, but that transaction
+	  has not shown up in the statement). UPDATE: this is caused by recent
+	  update in KlikBCA system where apparently the mutation page is no
+	  longer real-time (there is probably a 15 minute delay or maybe more).
+	  So the total credit is already updated with some very recent
+	  transactions, but the transactions have not shown up yet in the
+	  mutation page. So now this check is no longer mandatory.
 
 
 0.35    2015-04-28 (PERLANCAR)
