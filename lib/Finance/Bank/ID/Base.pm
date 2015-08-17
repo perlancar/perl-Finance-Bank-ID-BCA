@@ -19,9 +19,9 @@ has password    => (is => 'rw');
 has logged_in   => (is => 'rw');
 has accounts    => (is => 'rw');
 has logger      => (is => 'rw',
-                    default => sub { Log::Any->get_logger() } );
+                    default => sub { Log::Any::IfLOG->get_logger() } );
 has logger_dump => (is => 'rw',
-                    default => sub { Log::Any->get_logger() } );
+                    default => sub { Log::Any::IfLOG->get_logger() } );
 
 has site => (is => 'rw');
 
