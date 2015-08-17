@@ -1,11 +1,12 @@
 package Finance::Bank::ID::BCA;
 
+# DATE
+# VERSION
+
 use 5.010001;
 use Moo;
 use DateTime;
-use Log::Any '$log';
-
-# VERSION
+use Log::Any::IfLOG '$log';
 
 extends 'Finance::Bank::ID::Base';
 

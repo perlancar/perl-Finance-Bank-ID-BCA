@@ -5,7 +5,7 @@ package Finance::Bank::ID::Base;
 
 use 5.010;
 use Moo;
-use Log::Any '$log';
+use Log::Any::IfLOG '$log';
 
 use Data::Dumper;
 use Data::Rmap qw(:all);

@@ -6,7 +6,7 @@ package Finance::BankUtils::ID::Mechanize;
 use 5.010;
 use strict;
 use warnings;
-use Log::Any qw($log);
+use Log::Any::IfLOG qw($log);
 
 use parent qw(WWW::Mechanize);
 
