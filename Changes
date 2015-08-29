@@ -1,5 +1,12 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.39    2015-08-29 (PERLANCAR)
+
+	- No functional changes.
+
+	- Specify minimum prereq version [RT#106757].
+
+
 0.38    2015-08-17 (PERLANCAR)
 
 	- Switch from Log::Any to Log::Any::IfLOG.
