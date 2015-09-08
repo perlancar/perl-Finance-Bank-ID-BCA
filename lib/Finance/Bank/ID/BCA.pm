@@ -340,7 +340,6 @@ sub _ps_get_transactions {
         push @e, {date=>$1, desc=>$2, br=>$3, amt=>$4, amtf=>$5, crdb=>$6, bal=>$7, balf=>$8};
     }
     if (!@e) {
-        say "D1";
         # HTML version
         while ($page =~ m!^
 <tr>\s*
