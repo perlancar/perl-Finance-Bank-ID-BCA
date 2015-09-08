@@ -1,5 +1,12 @@
 Revision history for Finance-Bank-ID-BCA
 
+0.42    2015-09-08 (PERLANCAR)
+
+	- Update regex for matching transaction: allow whitespaces.
+
+	- Tweak example code.
+
+
 0.41    2015-09-03 (PERLANCAR)
 
 	- No functional changes.
