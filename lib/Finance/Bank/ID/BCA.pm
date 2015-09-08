@@ -479,12 +479,15 @@ If you want to use the library in your Perl application:
             print "$tx->{date} $tx->{amount} $tx->{description}\n";
         }
     };
+    warn if $@;
 
     # remember to call this, otherwise you will have trouble logging in again
     # for some time
-    if ($ibank->logged_in) { $ibank->logout() }
+    $ibank->logout();
 
-    # utility routines
+Utility routines:
+
+    # parse HTML statement directly
     my $res = $ibank->parse_statement($html);
 
 
