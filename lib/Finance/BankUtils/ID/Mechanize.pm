@@ -21,7 +21,7 @@ sub new {
     bless $mech, $class;
 }
 
-# will be set by some other code, and will be immadiately consumed and emptied
+# will be set by some other code, and will be immediately consumed and emptied
 # by _make_request().
 our $saved_resp;
 
