@@ -7,7 +7,7 @@ use 5.010;
 use Moo;
 use Log::Any::IfLOG '$log';
 
-use Data::Dumper;
+use Data::Dmp;
 use Data::Rmap qw(:all);
 use DateTime;
 use Finance::BankUtils::ID::Mechanize;
@@ -41,11 +41,6 @@ sub _fmtdate {
 sub _fmtdt {
     my ($self, $dt) = @_;
     $dt->datetime;
-}
-
-sub _dmp {
-    my ($self, $var) = @_;
-    Data::Dumper->new([$var])->Indent(0)->Terse(1)->Dump;
 }
 
 # strip non-digit characters
@@ -89,7 +84,7 @@ sub _req {
     my $mech = $self->mech;
     my $c = $self->_req_counter + 1;
     $self->_req_counter($c);
-    $self->logger->debug("mech request #$c: $meth ".$self->_dmp($args)."");
+    $self->logger->debug("mech request #$c: $meth ".dmp($args)."");
     my $errmsg = "";
 
     eval {
@@ -107,7 +102,7 @@ sub _req {
 
     eval {
         $self->logger_dump->debug(
-            "<!-- result of mech request #$c ($meth ".$self->_dmp($args)."):\n".
+            "<!-- result of mech request #$c ($meth ".dmp($args)."):\n".
             $mech->response->status_line."\n".
             $mech->response->headers->as_string."\n".
             "-->\n".
@@ -244,11 +239,11 @@ sub parse_statement {
         last;
     }
 
-    $self->logger->debug("parse_statement(): Temporary result: ".$self->_dmp($stmt));
+    $self->logger->debug("parse_statement(): Temporary result: ".dmp($stmt));
     $self->logger->debug("parse_statement(): Status: $status ($error)");
 
     $stmt = undef unless $status == 200;
-    $self->logger->debug("parse_statement(): Result: ".$self->_dmp($stmt));
+    $self->logger->debug("parse_statement(): Result: ".dmp($stmt));
 
     unless ($opts{return_datetime_obj} // 1) {
         # $_[0]{seen} = {} is a trick to allow multiple places which mention the
