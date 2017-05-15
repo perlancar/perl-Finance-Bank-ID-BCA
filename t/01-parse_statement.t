@@ -132,6 +132,8 @@ for my $f (
        "$f->[1] (num skipped tx)");
 }
 
+# XXX check skip_problematic
+
 my $res = $ibank->parse_statement(scalar(read_text("$Bin/data/stmt1.html")), return_datetime_obj=>0);
 my $stmt = $res->[2];
 ok(!ref($stmt->{start_date}), "return_datetime_obj=0 (1)");
