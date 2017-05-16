@@ -118,22 +118,6 @@ for my $f (
     is($stmt->{transactions}[2]{seq}, 3, "$f->[1] (seq 2)");
 }
 
-# check skip_NEXT
-for my $f (
-    ["stmt2-NEXT.txt", "bisnis, txt"],) {
-    local $ibank->{skip_NEXT} = 1;
-    my $resp = $ibank->parse_statement(scalar read_text("$Bin/data/$f->[0]"));
-    die "status=$resp->[0], error=$resp->[1]\n" if $resp->[0] != 200;
-    my $stmt = $resp->[2];
-
-    # transactions
-    is(scalar(@{ $stmt->{transactions} }), 2, "$f->[1] (num tx)");
-    is(scalar(@{ $stmt->{skipped_transactions} }), 1,
-       "$f->[1] (num skipped tx)");
-}
-
-# XXX check skip_problematic
-
 my $res = $ibank->parse_statement(scalar(read_text("$Bin/data/stmt1.html")), return_datetime_obj=>0);
 my $stmt = $res->[2];
 ok(!ref($stmt->{start_date}), "return_datetime_obj=0 (1)");

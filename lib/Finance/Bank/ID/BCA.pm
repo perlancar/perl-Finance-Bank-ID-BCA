@@ -11,8 +11,6 @@ use Log::Any::IfLOG '$log';
 extends 'Finance::Bank::ID::Base';
 
 has _variant => (is => 'rw'); # bisnis or perorangan
-has skip_NEXT => (is => 'rw');
-has skip_problematic => (is => 'rw');
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -420,15 +418,6 @@ sub _ps_get_transactions {
             # month, regardless of whether it's Sat/Sun or not
         }
 
-        if ($tx->{is_next} && ($self->skip_NEXT || $self->skip_problematic)) {
-            push @skipped_tx, $tx;
-            $seq--;
-        } elsif ($tx->{is_pending} && $tx->{description} eq 'SETORAN KLIRING BI' && ($self->skip_NEXT || $self->skip_problematic)) {
-            push @skipped_tx, $tx;
-            $seq--;
-        } else {
-            push @tx, $tx;
-        }
     }
     $stmt->{transactions} = \@tx;
     $stmt->{skipped_transactions} = \@skipped_tx;
@@ -534,22 +523,6 @@ in the distribution.
 
 
 =head1 ATTRIBUTES
-
-=head2 skip_NEXT => BOOL
-
-If set to true, then entries with NEXT status will be skipped.
-
-See also: C<skip_problematic>.
-
-=head2 skip_problematic => BOOL
-
-If set to true, will skip entries that are problematic, i.e. that might change
-or disappear in subsequent statement. For example: "SETORAN KLIRING BI" entries
-which can later show up at the top/bottom of statement.
-
-Will also skip NEXT entries.
-
-See also: C<skip_NEXT>.
 
 
 =head1 METHODS
