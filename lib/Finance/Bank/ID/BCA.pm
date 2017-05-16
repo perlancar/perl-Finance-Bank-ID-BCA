@@ -418,6 +418,7 @@ sub _ps_get_transactions {
             # month, regardless of whether it's Sat/Sun or not
         }
 
+        push @tx, $tx;
     }
     $stmt->{transactions} = \@tx;
     $stmt->{skipped_transactions} = \@skipped_tx;
