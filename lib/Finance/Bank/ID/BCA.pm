@@ -323,17 +323,17 @@ sub _ps_get_transactions {
     my @e;
     # text version
     while ($page =~ m!^
-(\d\d/\d\d|\s?PEND|\s?NEXT)
+(\d\d/\d\d|\s?PEND|\s?NEXT) # 1) date
   (?:\s*\t\s*|\n)+
-((?:[^\t]|\n)*?)
+((?:[^\t]|\n)*?) # 2) description
   (?:\s*\t\s*|\n)+
-(\d{4})
+(\d{4}) # 3) branch code
   (?:\s*\t\s*|\n)+
-([0-9,]+)\.(\d\d)
+([0-9,]+)\.(\d\d) # 4+5) amount
   (?:\s*\t?\s*|\n)+
-(CR|DB)
+(CR|DB) # 6)
   (?:\s*\t\s*|\n)+
-([0-9,]+)\.(\d\d)
+([0-9,]+)\.(\d\d) # 7+8) balance
     !mxg) {
         push @e, {date=>$1, desc=>$2, br=>$3, amt=>$4, amtf=>$5, crdb=>$6, bal=>$7, balf=>$8};
     }
