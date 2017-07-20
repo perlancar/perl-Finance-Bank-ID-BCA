@@ -324,15 +324,15 @@ sub _ps_get_transactions {
     # text version
     while ($page =~ m!^
 (\d\d/\d\d|\s?PEND|\s?NEXT)
-  (?:\s*\t\s*|\n)
+  (?:\s*\t\s*|\n)+
 ((?:[^\t]|\n)*?)
-  (?:\s*\t\s*|\n)
+  (?:\s*\t\s*|\n)+
 (\d{4})
-  (?:\s*\t\s*|\n)
+  (?:\s*\t\s*|\n)+
 ([0-9,]+)\.(\d\d)
-  (?:\s*\t?\s*|\n)
+  (?:\s*\t?\s*|\n)+
 (CR|DB)
-  (?:\s*\t\s*|\n)
+  (?:\s*\t\s*|\n)+
 ([0-9,]+)\.(\d\d)
     !mxg) {
         push @e, {date=>$1, desc=>$2, br=>$3, amt=>$4, amtf=>$5, crdb=>$6, bal=>$7, balf=>$8};
