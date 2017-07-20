@@ -8,10 +8,6 @@ use Moo;
 use Log::ger;
 
 use Data::Dmp;
-use Data::Rmap qw(:all);
-use DateTime;
-use Finance::BankUtils::ID::Mechanize;
-use YAML::Syck qw(LoadFile DumpFile);
 
 has mech        => (is => 'rw');
 has username    => (is => 'rw');
@@ -60,6 +56,8 @@ sub BUILD {
 }
 
 sub _set_default_mech {
+    require Finance::BankUtils::ID::Mechanize;
+
     my ($self) = @_;
     $self->mech(
         Finance::BankUtils::ID::Mechanize->new(
@@ -90,12 +88,14 @@ sub _req {
     eval {
         if ($self->mode eq 'simulation' &&
                 $self->save_dir && (-f $self->save_dir . "/$opts->{id}.yaml")) {
+            require YAML::Syck;
             $Finance::BankUtils::ID::Mechanize::saved_resp =
-                LoadFile($self->save_dir . "/$opts->{id}.yaml");
+                YAML::Syck::LoadFile($self->save_dir . "/$opts->{id}.yaml");
         }
         $mech->$meth(@$args);
         if ($self->save_dir && $self->mode ne 'simulation') {
-            DumpFile($self->save_dir . "/$opts->{id}.yaml", $mech->response);
+            require YAML::Syck;
+            YAML::Syck::DumpFile($self->save_dir . "/$opts->{id}.yaml", $mech->response);
         }
     };
     my $evalerr = $@;
@@ -248,10 +248,11 @@ sub parse_statement {
     unless ($opts{return_datetime_obj} // 1) {
         # $_[0]{seen} = {} is a trick to allow multiple places which mention the
         # same object to be converted (defeat circular checking)
-        rmap_ref {
+        require Data::Rmap;
+        Data::Rmap::rmap_ref(sub {
             $_[0]{seen} = {};
             $_ = $self->_fmtdt($_) if UNIVERSAL::isa($_, "DateTime");
-        } $stmt;
+        }, $stmt);
     }
 
     [$status, $error, $stmt];

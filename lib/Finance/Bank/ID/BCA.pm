@@ -5,7 +5,6 @@ package Finance::Bank::ID::BCA;
 
 use 5.010001;
 use Moo;
-use DateTime;
 
 extends 'Finance::Bank::ID::Base';
 
@@ -147,6 +146,8 @@ sub check_balance {
 }
 
 sub get_statement {
+    require DateTime;
+
     my ($self, %args) = @_;
     my $s = $self->site;
     my $max_days = 31;
@@ -277,6 +278,8 @@ sub _ps_detect {
 }
 
 sub _ps_get_metadata {
+    require DateTime;
+
     my ($self, $page, $stmt) = @_;
 
     unless ($page =~ /\s*(?:(?:Nomor|No\.) [Rr]ekening|Account Number)\s*(?:<[^>]+>\s*)*[:\t]\s*(?:<[^>]+>\s*)*([\d-]+)/m) {
@@ -318,6 +321,8 @@ sub _ps_get_metadata {
 }
 
 sub _ps_get_transactions {
+    require DateTime;
+
     my ($self, $page, $stmt) = @_;
 
     my @e;
