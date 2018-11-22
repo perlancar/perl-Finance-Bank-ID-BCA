@@ -79,6 +79,13 @@ sub _menu {
                 {id=>'accinfo_menu'});
 }
 
+sub _menu_estatement {
+    my ($self) = @_;
+    my $s = $self->site;
+    $self->_req(get => ["$s/nav_bar_indo/estatement.htm"],
+                {id=>'estatement_menu'});
+}
+
 sub list_accounts {
     my ($self) = @_;
     $self->login;
@@ -154,8 +161,10 @@ sub get_statement {
 
     $self->login;
     $self->_menu;
-    $self->logger->info("Getting statement for ".
-        ($args{account} ? "account `$args{account}'" : "default account")." ...");
+    $self->logger->info(
+        "Getting statement for ".
+            ($args{account} ? "account `$args{account}'" : "default account").
+            " ...");
     $self->_req(post => ["$s/accountstmt.do?value(actions)=acct_stmt"],
                 {
                     id => 'get_statement_form',
@@ -427,6 +436,50 @@ sub _ps_get_transactions {
     $stmt->{transactions} = \@tx;
     $stmt->{skipped_transactions} = \@skipped_tx;
     "";
+}
+
+sub get_estatement {
+    my ($self, %args) = @_;
+    my $s = $self->site;
+
+    $self->login;
+    $self->_menu;
+    $self->_menu_estatement;
+    $self->logger->info(
+        "Getting e-statement for ".
+            ($args{account} ? "account `$args{account}'" : "default account").
+            " ...");
+    $self->_req(post => ["$s/estatement.do?value(actions)=estmt"],
+                {
+                    id => 'get_estatement_form',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        my $errmsg = $self->_get_bca_errmsg;
+                        return "BCA errmsg: $errmsg" if $errmsg;
+                        $mech->content =~ /<form/i or
+                            return "no form found, maybe we got logged out?";
+                        '';
+                    },
+                });
+    $self->_req(submit_form => [
+                                form_number => 1,
+                                fields => {
+                                    "value(monthVal)" => $args{month},
+                                    "value(yearVal)"  => $args{year},
+                                },
+                            ],
+                {
+                    id => 'get_estatement',
+                    after_request => sub {
+                        my ($mech) = @_;
+                        my $errmsg = $self->_get_bca_errmsg;
+                        return "BCA errmsg: $errmsg" if $errmsg;
+                        '';
+                    },
+                });
+    my $resp = $self->parse_statement($self->mech->content, %$parse_opts);
+    return if !$resp || $resp->[0] != 200;
+    $resp->[2];
 }
 
 1;
