@@ -477,9 +477,10 @@ sub get_estatement {
                         '';
                     },
                 });
-    my $resp = $self->parse_statement($self->mech->content, %$parse_opts);
-    return if !$resp || $resp->[0] != 200;
-    $resp->[2];
+    return [
+        $self->mech->response->code,
+        $self->mech->response->code,
+        $self->mech->content];
 }
 
 1;
