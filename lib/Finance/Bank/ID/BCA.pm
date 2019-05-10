@@ -6,6 +6,8 @@ package Finance::Bank::ID::BCA;
 use 5.010001;
 use Moo;
 
+use HTTP::UserAgentStr::Util::ByNickname qw(newest_firefox);
+
 extends 'Finance::Bank::ID::Base';
 
 has _variant => (is => 'rw'); # bisnis or perorangan
@@ -15,6 +17,8 @@ sub BUILD {
 
     $self->site("https://ibank.klikbca.com") unless $self->site;
     $self->https_host("ibank.klikbca.com")   unless $self->https_host;
+    $self->_set_default_mech unless $self->mech;
+    $self->mech->agent(newest_firefox());
 }
 
 sub _req {
