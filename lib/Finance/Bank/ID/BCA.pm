@@ -590,7 +590,7 @@ in the distribution.
 
 =head1 METHODS
 
-=for Pod::Coverage BUILD
+=for Pod::Coverage (BUILD|get_estatement)
 
 =head2 new(%args)
 
