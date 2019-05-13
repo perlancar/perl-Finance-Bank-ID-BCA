@@ -1,7 +1,17 @@
 0.500   2019-05-10 (PERLANCAR)
 
-	- Set User-Agent to newest Firefox in an attempt to avoid being
-	  detected as 'malware' by BCA.
+	- Set User-Agent to newest Firefox in an attempt to avoid being detected
+	  as 'malware' by BCA. As https://www.bca.co.id/id/edukatips/update/
+	  page indicates, BCA might mark older or other "non-compliant" browsers
+	  as being unsafe. Quoted from the page: "Stay up to date! Perlancar
+	  e-banking-mu dengan browser dan OS terbaru! Bagi kamu pengguna
+	  e-banking BCA (KlikBCA Individu, BCA KlikPay, BCA mobile, dan Sakuku),
+	  tahukah pentingnya memperbarui browser dan OS (Operating System)
+	  secara berkala? Jika browser dan OS di smartphone-mu kurang mendukung,
+	  kamu tidak dapat mengakses e-banking BCA di smartphone-mu dengan
+	  lancar." List of browsers include: Android 4.4.4; Google Chrome v38;
+	  Mozilla Firefox/ Waterfox v34; Internet Explorer 8 (Desktop) /
+	  Internet Explorer 11 (Mobile); Safari 8; Opera v20.
 
 
 0.49    2017-07-20 (PERLANCAR)
